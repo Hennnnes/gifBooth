@@ -11,12 +11,12 @@
 
 - open [127.0.0.1:3030](127.0.0.1:3030) in your browser
 
-
-
 ## Frontend
+Frontend App is based on create-react-app.
+
 - `cd frontend` to move to server directory
 - `npm install` to install needed dependencies
-- `npm start` to start frontend App
+- `npm start` to start frontend App, browser opens automatically
 
 
 ## Packages
