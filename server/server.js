@@ -1,11 +1,13 @@
+// requires
 const express = require('express');
 const bodyParser = require('body-parser');
-const GIFEncoder = require('gifencoder');
-const pngFileStream = require('png-file-stream');
-const Canvas = require('canvas');
 const fs  = require('fs');
 
-const encoder = new GIFEncoder(850, 480);
+// to run command line
+const sys = require('util')
+const exec = require('child_process').exec;
+
+// env vars
 const app = module.exports = express();
 const port = 8080;
 
@@ -15,21 +17,21 @@ app.use(bodyParser.urlencoded({ extended: true}));
 // return only json
 app.use(bodyParser.json());
 
-app.post('/start', function(req, res) {
-    res.json({ message: 'start' });
-});
+// routes
+app.post('/expose', (req, res) => {
+    const name = generateRandomName();
+    exposeCamera(name, 10);
 
-app.post('/create', function(req, res) {
-    /* generate link */
-    const link = `public/${Date.now()}-${Math.floor((Math.random() * 1000) + 1)}.gif`;
+    /* TODO get time from headers, insert into cutVideo(percent) */
+    // cutVideo(90);
 
-    createGif(link);
+    generateJPGs(name);
+    const path = createGif(name);
 
-    res.json({message: 'Done.', link: link });
-});
-
-app.post('/stop', function(req, res) {
-    res.json({ message: 'turned off' });
+    res.json({
+        message: `Camera exposed.`,
+        path: path
+    });
 });
 
 // start Server
@@ -38,40 +40,38 @@ app.listen(port, () => {
 });
 
 
-function initEncoder(repeat = 0, delay = 100, quality = 10) {
-    encoder.start();
-    encoder.setRepeat(repeat);
-    encoder.setDelay(delay);
-    encoder.setQuality(quality);
+/* Functions */
+/* TODO put in different file */
+function exposeCamera(path, time = 10) {
+    exec(`gphoto2 --capture-movie=${time}s`);
+    exec(`mkdir ${path}`);
+    exec(`mv movie.mjpg ${path}/movie.mjpg`);
+
+    setTimeout(() => {
+        console.log(`10s of video captured`);
+    }, (time * 1000) );
 }
 
-function createGif(fileLink) {
-    /* init encoder */
-    initEncoder(0, 100, 10);
+function generateJPGs(path) {
+    // create folder for gif
+    exec(`mkdir temp/${path}`);
 
-    /* allow to write file to system  */
-    encoder.createReadStream()
-        .pipe(fs.createWriteStream(fileLink));
+    // create jpgs in folder path
+    exec(`ffmpeg -i temp/${path} -vcodec copy temp/${path}/out-%d.jpg`);
+}
 
-    //  for now use node canvas as a sample
-    const canvas = new Canvas(850, 480);
-    const ctx = canvas.getContext('2d');
+function createGif(path) {
+    exec(`ffmpeg -f image2 -i temp/${path}/out-%d.jpg created/${path}.gif`);
+    return `created/${path}.gif`;
+}
 
-    // red rectangle
-    ctx.fillStyle = '#ff0000';
-    ctx.fillRect(0, 0, 850, 480);
-    encoder.addFrame(ctx);
 
-    // green rectangle
-    ctx.fillStyle = '#00ff00';
-    ctx.fillRect(0, 0, 850, 480);
-    encoder.addFrame(ctx);
+/* TODO */
+/* prrobably simply rename the last x percent of files based on percentage  */
+function cutVideo(percentageKept) {
 
-    // blue rectangle
-    ctx.fillStyle = '#0000ff';
-    ctx.fillRect(0, 0, 850, 480);
-    encoder.addFrame(ctx);
+}
 
-    // finish it
-    encoder.finish();
+function generateRandomName() {
+    return `${Date.now()}-${(Math.floor(Math.random() * 10000) + 1)}`;
 }
