@@ -57,7 +57,7 @@ function generateJPGs(path) {
     exec(`mkdir temp/${path}`);
 
     // create jpgs in folder path
-    exec(`ffmpeg -i temp/${path} -vcodec copy temp/${path}/out-%d.jpg`);
+    exec(`ffmpeg -i ${path}/movie.mjpg -vcodec copy temp/${path}/out-%d.jpg`);
 }
 
 function createGif(path) {
