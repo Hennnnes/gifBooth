@@ -39,13 +39,30 @@ app.listen(port, () => {
     console.log('Listen on Port: ' + port);
 });
 
+/* TODO put general functions in different file */
+
+// folder structure
+/*
+  *  - files
+  *     - zufaelliger Dateiname mit Datum
+  *        - video
+  *          - video.gif
+  *        - frames
+  *          - einzelne jpg Datei der Frames benannt nach out-XYZ.jpg
+  *        - ergebnis Gif
+  */
 
 /* Functions */
-/* TODO put in different file */
+function initEnv() {
+    // create initial file folder
+    exec(`mkdir files`);
+}
+
 function exposeCamera(path, time = 10) {
     exec(`gphoto2 --capture-movie=${time}s`);
-    exec(`mkdir ${path}`);
-    exec(`mv movie.mjpg ${path}/movie.mjpg`);
+    exec(`mkdir files/${path}`);
+    exec(`mkdir files/${path}/movie`);
+    exec(`mv movie.mjpg files/${path}/movie/movie.mjpg`);
 
     setTimeout(() => {
         console.log(`10s of video captured`);
@@ -54,17 +71,16 @@ function exposeCamera(path, time = 10) {
 
 function generateJPGs(path) {
     // create folder for gif
-    exec(`mkdir temp/${path}`);
+    exec(`mkdir files/${path}/frames`);
 
     // create jpgs in folder path
-    exec(`ffmpeg -i ${path}/movie.mjpg -vcodec copy temp/${path}/out-%d.jpg`);
+    exec(`ffmpeg -i files/${path}/movie/movie.mjpg -vcodec copy files/${path}/frames/out-%d.jpg`);
 }
 
 function createGif(path) {
-    exec(`ffmpeg -f image2 -i temp/${path}/out-%d.jpg created/${path}.gif`);
-    return `created/${path}.gif`;
+    exec(`ffmpeg -f image2 -i files/${path}/frames/out-%d.jpg fiels/${path}/${path}.gif`);
+    return `fiels/${path}/${path}.gif`;
 }
-
 
 /* TODO */
 /* prrobably simply rename the last x percent of files based on percentage  */
