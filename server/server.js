@@ -26,7 +26,7 @@ app.get('/expose', (req, res) => {
     // cutVideo(90);
 
     generateJPGs(name);
-    setTimeout(() => {createGif(name)}, 1000);
+    setTimeout(() => {createGif(name)}, 10000);
 
     res.json({
         message: `Camera exposed.`,
@@ -73,11 +73,11 @@ function generateJPGs(path) {
     exec(`mkdir files/${path}/frames`);
 
     // create jpgs in folder path
-    exec(`ffmpeg -i files/${path}/movie/movie.mjpg -vcodec copy files/${path}/frames/out-%d.jpg`);
+    exec(`ffmpeg -i files/${path}/movie/movie.mjpg -vf fps=5 files/${path}/frames/out-%d.jpg`);
 }
 
 function createGif(path) {
-    exec(`ffmpeg -f image2 -i files/${path}/frames/out-%d.jpg files/${path}/${path}.gif`);
+    exec(`ffmpeg -f image2 -framerate 5 -i files/${path}/frames/out-%d.jpg files/${path}/${path}.gif`);
         console.log(`gif`);
     return `files/${path}/${path}.gif`;
 }
