@@ -1,0 +1,17 @@
+.btn {
+    display: inline-block;
+    font-size: 20px;
+    text-decoration: none;
+    text-transform: uppercase;
+    color: white;
+    text-align: center;
+    padding: 15px 20px;
+    background-color: #00e1df;
+    box-shadow: 0 2px 0 0 black;
+}
+
+.btn:hover,
+.btn:focus {
+    box-shadow: none;
+    transform: translateY(2px);
+}
