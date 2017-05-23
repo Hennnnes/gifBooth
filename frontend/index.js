@@ -37,7 +37,8 @@ folderName = generateFolderName();
 file = 'movie.mjpg';
  
 // main Stuff happens here
-// generateJPGs(file, folderName);
-// setTimeout(() => {createGif(folderName)}, 1000);
+generateJPGs(file, folderName);
+setTimeout(() => {createGif(folderName)}, 1000);
  
-exposeCamera(10, 'abctest');
+
+// exposeCamera(10, 'abctest');

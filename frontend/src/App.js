@@ -19,7 +19,7 @@ class App extends Component {
           <div>
               <h2>Some sample links to test stuff</h2>
 
-              <a href="http://localhost:8080/start">Turn on</a>
+              <a href="http://raspi11.local:8080/expose">Turn on</a>
               <a href="http://localhost:8080/stop">Turn on</a>
 
               <a href="http://localhost:8080/stop">Create sample gif</a>

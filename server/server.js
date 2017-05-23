@@ -10,7 +10,7 @@ const exec = require('child_process').exec;
 // env vars
 const app = module.exports = express();
 const port = 8080;
-
+ 	
 // body-parser to get data from post request
 app.use(bodyParser.urlencoded({ extended: true}));
 
@@ -18,7 +18,7 @@ app.use(bodyParser.urlencoded({ extended: true}));
 app.use(bodyParser.json());
 
 // routes
-app.post('/expose', (req, res) => {
+app.get('/expose', (req, res) => {
     const name = generateRandomName();
     exposeCamera(name, 10);
 
@@ -26,11 +26,10 @@ app.post('/expose', (req, res) => {
     // cutVideo(90);
 
     generateJPGs(name);
-    const path = createGif(name);
+    setTimeout(() => {createGif(name)}, 1000);
 
     res.json({
         message: `Camera exposed.`,
-        path: path
     });
 });
 
@@ -59,7 +58,7 @@ function initEnv() {
 }
 
 function exposeCamera(path, time = 10) {
-    exec(`gphoto2 --capture-movie=${time}s`);
+    //exec(`gphoto2 --capture-movie=${time}s`);
     exec(`mkdir files/${path}`);
     exec(`mkdir files/${path}/movie`);
     exec(`mv movie.mjpg files/${path}/movie/movie.mjpg`);
@@ -78,8 +77,9 @@ function generateJPGs(path) {
 }
 
 function createGif(path) {
-    exec(`ffmpeg -f image2 -i files/${path}/frames/out-%d.jpg fiels/${path}/${path}.gif`);
-    return `fiels/${path}/${path}.gif`;
+    exec(`ffmpeg -f image2 -i files/${path}/frames/out-%d.jpg files/${path}/${path}.gif`);
+        console.log(`gif`);
+    return `files/${path}/${path}.gif`;
 }
 
 /* TODO */
