@@ -73,7 +73,7 @@ function generateJPGs(path) {
     exec(`mkdir files/${path}/frames`);
 
     // create jpgs in folder path
-    exec(`ffmpeg -i files/${path}/movie/movie.mjpg -vf fps=5 files/${path}/frames/out-%d.jpg`);
+    exec(`ffmpeg -t 5 -i files/${path}/movie/movie.mjpg -vf fps=5 files/${path}/frames/out-%d.jpg`);
 }
 
 function createGif(path) {
