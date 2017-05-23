@@ -78,7 +78,7 @@ function generateJPGs(path) {
 
 function createGif(path) {
     exec(`ffmpeg -f image2 -framerate 5 -i files/${path}/frames/out-%d.jpg files/${path}/${path}.gif`);
-        console.log(`gif`);
+    console.log(`gif created`);
     return `files/${path}/${path}.gif`;
 }
 
