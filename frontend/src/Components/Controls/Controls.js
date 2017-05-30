@@ -24,6 +24,7 @@ class Controls extends React.Component {
         .then(result => {
             console.log(result.path);
             this.setState({path: `http://raspi11.local:8080/${result.path}`});
+		this.forceUpdate();
         })
         .catch(error => {
           console.log('error');
@@ -35,7 +36,7 @@ class Controls extends React.Component {
             <div>
                 <button className="btn" onClick={this.loadPath}>Create gif</button>
 
-                <img src={this.state.path} />
+                <img src={this.state.path} alt="gif" />
             </div>
         );
     }
