@@ -36,7 +36,7 @@ class Controls extends React.Component {
             <div>
                 <button className="btn" onClick={this.loadPath}>Create gif</button>
 
-                <img src={this.state.path} alt="gif" />
+                <a href={this.state.path} alt="gif" onChange={window.location.replace({this.state.path})}>asd</a>
             </div>
         );
     }
