@@ -28,18 +28,23 @@ app.get('/expose', (req, res) => {
     /* TODO get time from headers, insert into cutVideo(percent) */
     // cutVideo(90);
 
-    generateJPGs(name);
-    console.log(`jpegs generated ${name}`);
-
+    
+    
     setTimeout(function() {
-        createGif(name);
-        console.log(`gif created ${name}`);
+	generateJPGs(name);
+	console.log(`jpegs generated ${name}`);
+
+         setTimeout(function() {
+		
+		createGif(name);
+        	console.log(`gif created ${name}`);
+	}, 10000);
 
         res.json({
             message: `Camera exposed.`,
             path: getGifPath()
         });
-    }, 1000);
+    }, 10000);
 
 });
 
