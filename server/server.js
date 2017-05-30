@@ -22,7 +22,11 @@ app.use(bodyParser.urlencoded({ extended: true}));
 // return only json
 app.use(bodyParser.json());
 
+// cross origin
 app.use(cors());
+
+// files as static
+app.use('/files', express.static('files'));
 
 
 // routes
