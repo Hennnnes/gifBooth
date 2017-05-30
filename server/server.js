@@ -38,12 +38,14 @@ app.get('/expose', (req, res) => {
 		
 		createGif(name);
         	console.log(`gif created ${name}`);
+
+        	res.json({
+            		message: `Camera exposed.`,
+            		path: getGifPath()
+        	});
 	}, 10000);
 
-        res.json({
-            message: `Camera exposed.`,
-            path: getGifPath()
-        });
+
     }, 10000);
 
 });
