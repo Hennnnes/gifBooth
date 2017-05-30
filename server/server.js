@@ -29,18 +29,16 @@ app.get('/expose', (req, res) => {
     // cutVideo(90);
 
     generateJPGs(name);
-    setTimeout(() => {
-        createGif(name);
+    console.log(`jpegs generated ${name}`);
 
-        /* TODO Error Handling */
+    createGif(name);
+    console.log(`gif created ${name}`);
 
+    res.json({
+        message: `Camera exposed.`,
+        path: getGifPath()
+    });
 
-        res.json({
-            message: `Camera exposed.`,
-            path: getGifPath()
-        });
-
-    }, 10000);
 });
 
 // start Server
@@ -71,21 +69,26 @@ function exposeCamera(path, time = 10) {
 
         exec(`mv movie.mjpg files/${path}/movie/movie.mjpg`);
     }, (time * 1000) );
+
+    console.log(`camera exposed`);
 }
 
-function generateJPGs(path, length = 10, fps = 5) {
+function generateJPGs(path) {
     // create folder for gif
     exec(`mkdir files/${path}/frames`);
 
     // create jpgs in folder path
-    /* TODO: Was passiert hier?? */
-    exec(`ffmpeg -t ${length} -i files/${path}/movie/movie.mjpg -vf fps=${fps} files/${path}/frames/out-%d.jpg`);
+    exec(`ffmpeg -t 5 -i files/${path}/movie/movie.mjpg -vf fps=5 files/${path}/frames/out-%d.jpg`);
+
+    console.log(`jpegs generated`);
 }
 
-function createGif(path, fps = 5) {
+function createGif(path) {
     setGifPath(`files/${path}/${path}.gif`);
 
-    exec(`ffmpeg -f image2 -framerate ${fps} -i files/${path}/frames/out-%d.jpg ${getGifPath()}`);
+    exec(`ffmpeg -f image2 -framerate 5 -i files/${path}/frames/out-%d.jpg ${getGifPath()}`);
+
+    console.log(`gif created`);
 }
 
 function setGifPath(path) {
