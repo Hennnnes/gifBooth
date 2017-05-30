@@ -10,7 +10,10 @@ const exec = require('child_process').exec;
 // env vars
 const app = module.exports = express();
 const port = 8080;
- 	
+
+// file path var
+let gifPath = ``;
+
 // body-parser to get data from post request
 app.use(bodyParser.urlencoded({ extended: true}));
 
@@ -26,11 +29,19 @@ app.get('/expose', (req, res) => {
     // cutVideo(90);
 
     generateJPGs(name);
-    setTimeout(() => {createGif(name)}, 10000);
+    setTimeout(() => {
+        createGif(name);
 
-    res.json({
-        message: `Camera exposed.`,
-    });
+
+        /* TODO Error Handling */
+
+
+        res.json({
+            message: `Camera exposed.`,
+            path: getGifPath()
+        });
+
+    }, 10000);
 });
 
 // start Server
@@ -52,11 +63,6 @@ app.listen(port, () => {
   */
 
 /* Functions */
-function initEnv() {
-    // create initial file folder
-    exec(`mkdir files`);
-}
-
 function exposeCamera(path, time = 10) {
     //exec(`gphoto2 --capture-movie=${time}s`);
     exec(`mkdir files/${path}`);
@@ -68,18 +74,27 @@ function exposeCamera(path, time = 10) {
     }, (time * 1000) );
 }
 
-function generateJPGs(path) {
+function generateJPGs(path, length = 10, fps = 5) {
     // create folder for gif
     exec(`mkdir files/${path}/frames`);
 
     // create jpgs in folder path
-    exec(`ffmpeg -t 5 -i files/${path}/movie/movie.mjpg -vf fps=5 files/${path}/frames/out-%d.jpg`);
+    /* TODO: Was passiert hier?? */
+    exec(`ffmpeg -t ${length} -i files/${path}/movie/movie.mjpg -vf fps=${fps} files/${path}/frames/out-%d.jpg`);
 }
 
-function createGif(path) {
-    exec(`ffmpeg -f image2 -framerate 5 -i files/${path}/frames/out-%d.jpg files/${path}/${path}.gif`);
-    console.log(`gif created`);
-    return `files/${path}/${path}.gif`;
+function createGif(path, fps = 5) {
+    setGifPath(`files/${path}/${path}.gif`);
+
+    exec(`ffmpeg -f image2 -framerate ${fps} -i files/${path}/frames/out-%d.jpg ${getGifPath()}`);
+}
+
+function setGifPath(path) {
+    gifPath = path;
+}
+
+function getGifPath() {
+    return gifPath;
 }
 
 /* TODO */
