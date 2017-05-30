@@ -6,6 +6,7 @@ class Controls extends React.Component {
         super();
 
         this.loadPath = this.loadPath.bind(this);
+        this.forceUpdate = this.forceUpdate.bind(this);
 
         this.state = {
             path: ''
@@ -31,12 +32,17 @@ class Controls extends React.Component {
         })
     }
 
+    updateWindow() {
+        this.forceUpdate();
+        window.location.replace({this.state.path});
+    }
+
     render() {
         return (
             <div>
                 <button className="btn" onClick={this.loadPath}>Create gif</button>
 
-                <a href={this.state.path} alt="gif" onChange={window.location.replace({this.state.path})}>asd</a>
+                <a href={this.state.path} onChange={this.updateWindow}>asd</a>
             </div>
         );
     }
