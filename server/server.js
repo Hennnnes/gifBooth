@@ -31,7 +31,7 @@ app.get('/expose', (req, res) => {
     generateJPGs(name);
     console.log(`jpegs generated ${name}`);
 
-    setTimeout(()  => {
+    setTimeout(function() {
         createGif(name);
         console.log(`gif created ${name}`);
 
@@ -65,12 +65,12 @@ app.listen(port, () => {
 function exposeCamera(path, time) {
     exec(`rm -rf movie.mjpg`);
     exec(`gphoto2 --capture-movie=10s`);
-    setTimeout(() => {
+    setTimeout(function() {
         exec(`mkdir files/${path}`);
         exec(`mkdir files/${path}/movie`);
 
         exec(`mv movie.mjpg files/${path}/movie/movie.mjpg`);
-    }, (10000) );
+    }, 10000 );
 
     console.log(`camera exposed`);
 }
