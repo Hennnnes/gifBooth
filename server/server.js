@@ -58,7 +58,7 @@ function initEnv() {
 }
 
 function exposeCamera(path, time = 10) {
-    //exec(`gphoto2 --capture-movie=${time}s`);
+    exec(`gphoto2 --capture-movie=${time}s`);
     exec(`mkdir files/${path}`);
     exec(`mkdir files/${path}/movie`);
     exec(`mv movie.mjpg files/${path}/movie/movie.mjpg`);

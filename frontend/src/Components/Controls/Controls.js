@@ -4,7 +4,7 @@ import './Controls.css';
 const Controls = () => {
     return (
         <div>
-            <a href="http://localhost:8080/expose" alt="controls" className="btn">Create gif</a>
+            <a href="http://raspi11.local:8080/expose" alt="controls" className="btn">Create gif</a>
         </div>
     )
 }
