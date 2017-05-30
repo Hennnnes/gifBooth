@@ -31,13 +31,15 @@ app.get('/expose', (req, res) => {
     generateJPGs(name);
     console.log(`jpegs generated ${name}`);
 
-    createGif(name);
-    console.log(`gif created ${name}`);
+    setTimeout(()  => {
+        createGif(name);
+        console.log(`gif created ${name}`);
 
-    res.json({
-        message: `Camera exposed.`,
-        path: getGifPath()
-    });
+        res.json({
+            message: `Camera exposed.`,
+            path: getGifPath()
+        });
+    }, 1000);
 
 });
 
@@ -60,15 +62,15 @@ app.listen(port, () => {
   */
 
 /* Functions */
-function exposeCamera(path, time = 10) {
+function exposeCamera(path, time) {
     exec(`rm -rf movie.mjpg`);
-    exec(`gphoto2 --capture-movie=${time}s`);
+    exec(`gphoto2 --capture-movie=10s`);
     setTimeout(() => {
         exec(`mkdir files/${path}`);
         exec(`mkdir files/${path}/movie`);
 
         exec(`mv movie.mjpg files/${path}/movie/movie.mjpg`);
-    }, (time * 1000) );
+    }, (10000) );
 
     console.log(`camera exposed`);
 }
