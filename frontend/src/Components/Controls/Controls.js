@@ -23,7 +23,7 @@ class Controls extends React.Component {
         })
         .then(result => {
             console.log(result.path);
-            this.setState({path: `http://raspi11.local/server/${result.path}`});
+            this.setState({path: `http://raspi11.local:8080/${result.path}`});
         })
         .catch(error => {
           console.log('error');
