@@ -2,6 +2,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const fs  = require('fs');
+const cors = require('cors');
+
 
 // to run command line
 const sys = require('util')
@@ -20,6 +22,9 @@ app.use(bodyParser.urlencoded({ extended: true}));
 // return only json
 app.use(bodyParser.json());
 
+app.use(cors());
+
+
 // routes
 app.get('/expose', (req, res) => {
     const name = generateRandomName();
@@ -28,14 +33,12 @@ app.get('/expose', (req, res) => {
     /* TODO get time from headers, insert into cutVideo(percent) */
     // cutVideo(90);
 
-    
-    
     setTimeout(function() {
 	generateJPGs(name);
 	console.log(`jpegs generated ${name}`);
 
-         setTimeout(function() {
-		
+        setTimeout(function() {
+
 		createGif(name);
         	console.log(`gif created ${name}`);
 
@@ -43,8 +46,7 @@ app.get('/expose', (req, res) => {
             		message: `Camera exposed.`,
             		path: getGifPath()
         	});
-	}, 10000);
-
+       }, 10000);
 
     }, 10000);
 
@@ -54,19 +56,6 @@ app.get('/expose', (req, res) => {
 app.listen(port, () => {
     console.log('Listen on Port: ' + port);
 });
-
-/* TODO put general functions in different file */
-
-// folder structure
-/*
-  *  - files
-  *     - zufaelliger Dateiname mit Datum
-  *        - video
-  *          - video.gif
-  *        - frames
-  *          - einzelne jpg Datei der Frames benannt nach out-XYZ.jpg
-  *        - ergebnis Gif
-  */
 
 /* Functions */
 function exposeCamera(path, time) {
