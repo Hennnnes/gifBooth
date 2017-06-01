@@ -2,6 +2,8 @@
 const mqtt = require('mqtt');
 const client = mqtt.connect('mqtt:broker.mqttdashboard.com');
 
+const base64Img = require('base64-img');
+
 // to run command line
 const sys = require('util')
 const exec = require('child_process').exec;
@@ -9,7 +11,7 @@ const exec = require('child_process').exec;
 
 client.on('connect', function () {
   client.subscribe('testtopic/1')
-  client.publish('testtopic/1', '5, 20, normal')
+  client.publish('testtopic/1', 'expose, 5, 20, normal')
 })
 
 
@@ -25,16 +27,28 @@ client.on('message', function (topic, message) {
   message = message.toString();
   message = message.split(",");
 
-  const duration = message[0];
-  const fps = message[1];
-  const mode = message[2];
+  if (message[0] != 'expose') {
+      console.log('no expose message');
+      return;
+  }
+
+  const duration = message[1];
+  const fps = message[2];
+  const mode = message[3];
   const name = generateRandomName();
 
   // exposeCamera(duration);
   moveFile(name);
   generateGif(name, duration, fps);
 
-  client.end()
+  setTimeout(function() {
+      var data = base64Img.base64Sync(`files/${name}/output.gif`);
+
+      console.group(data);
+
+      client.publish('testtopic/1', data);
+      client.end();
+  }, 500);
 })
 
 /* Functions */

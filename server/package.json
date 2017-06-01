@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "base64-img": "^1.0.3",
     "mqtt": "^2.8.0"
   }
 }
