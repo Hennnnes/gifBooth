@@ -9,7 +9,7 @@ const exec = require('child_process').exec;
 
 client.on('connect', function () {
   client.subscribe('testtopic/1')
-  client.publish('testtopic/1', '5, 10, 20, normal')
+  client.publish('testtopic/1', '5, 20, normal')
 })
 
 
@@ -17,7 +17,7 @@ client.on('connect', function () {
 message format:
 [duration, framerate, fps, mode]
 sample:
-[5, 10, 20, 'normal']
+[5, 20, 'normal']
 */
 
 client.on('message', function (topic, message) {
@@ -26,68 +26,35 @@ client.on('message', function (topic, message) {
   message = message.split(",");
 
   const duration = message[0];
-  const framerate = message[1];
-  const fps = message[2];
-  const mode = message[3];
+  const fps = message[1];
+  const mode = message[2];
   const name = generateRandomName();
 
-  exposeCamera(duration);
-
-  // wait until camera is exposed
-  setTimeout(function() {
-    generateJPGs(name);
-
-    // wait until jpegs are generated
-    setTimeout(function() {
-        createGif(name);
-    }, duration * 100);
-
-  }, duration * 1000);
+  // exposeCamera(duration);
+  moveFile(name);
+  generateGif(name, duration, fps);
 
   client.end()
 })
 
-// file path var
-let gifPath = ``;
-
 /* Functions */
-function exposeCamera(path, time) {
+function exposeCamera(duration) {
+    // delete movie if there should be one left
     exec(`rm -rf movie.mjpg`);
-    exec(`gphoto2 --capture-movie=10s`);
-    setTimeout(function() {
-        exec(`mkdir files/${path}`);
-        exec(`mkdir files/${path}/movie`);
 
-        exec(`mv movie.mjpg files/${path}/movie/movie.mjpg`);
-    }, 10000 );
-
-    console.log(`camera exposed`);
+    // expose camera
+    exec(`gphoto2 --capture-movie=${duration}s`);
 }
 
-function generateJPGs(path) {
-    // create folder for gif
-    exec(`mkdir files/${path}/frames`);
-
-    // create jpgs in folder path
-    exec(`ffmpeg -t 5 -i files/${path}/movie/movie.mjpg -vf fps=5 files/${path}/frames/out-%d.jpg`);
-
-    console.log(`jpegs generated`);
+function moveFile(filename) {
+    exec(`mkdir files/${filename}`);
+    exec(`mv movie.mjpg files/${filename}/movie.mjpg`);
 }
 
-function createGif(path) {
-    setGifPath(`files/${path}/${path}.gif`);
-
-    exec(`ffmpeg -f image2 -framerate 5 -i files/${path}/frames/out-%d.jpg ${getGifPath()}`);
-
-    console.log(`gif created`);
-}
-
-function setGifPath(path) {
-    gifPath = path;
-}
-
-function getGifPath() {
-    return gifPath;
+function generateGif(name, duration, fps) {
+    // generate gif with custom palette
+    exec(`ffmpeg -t ${duration} -i files/${name}/movie.mjpg -filter_complex \
+"fps=${fps},scale=400:-1" files/${name}/output.gif`);
 }
 
 function generateRandomName() {
