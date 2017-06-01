@@ -34,7 +34,6 @@ class Controls extends React.Component {
 
     updateWindow() {
         this.forceUpdate();
-        window.location.replace({state.path});
     }
 
     render() {
