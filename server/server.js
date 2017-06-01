@@ -9,6 +9,7 @@ const sys = require('util')
 const exec = require('child_process').exec;
 
 
+/* TODO: sollte später vom client kommen! */
 client.on('connect', function () {
   client.subscribe('testtopic/1')
   client.publish('testtopic/1', 'expose, 5, 20, normal')
@@ -25,28 +26,30 @@ sample:
 client.on('message', function (topic, message) {
   // message is Buffer
   message = message.toString();
-  message = message.split(",");
 
+  // split message and get values
+  message = message.split(",");
   if (message[0] != 'expose') {
       console.log('no expose message');
       return;
   }
-
   const duration = message[1];
   const fps = message[2];
   const mode = message[3];
   const name = generateRandomName();
 
-  // exposeCamera(duration);
+  // actiooooon
+  exposeCamera(duration);
   moveFile(name);
   generateGif(name, duration, fps);
 
+  // wait because it takes it's time
   setTimeout(function() {
       var data = base64Img.base64Sync(`files/${name}/output.gif`);
 
-      console.group(data);
-
+      // publish data to topic
       client.publish('testtopic/1', data);
+
       client.end();
   }, 500);
 })
