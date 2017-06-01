@@ -1,65 +1,54 @@
 // requires
-const express = require('express');
-const bodyParser = require('body-parser');
-const fs  = require('fs');
-const cors = require('cors');
-
+const mqtt = require('mqtt');
+const client = mqtt.connect('mqtt:broker.mqttdashboard.com');
 
 // to run command line
 const sys = require('util')
 const exec = require('child_process').exec;
 
-// env vars
-const app = module.exports = express();
-const port = 8080;
+
+client.on('connect', function () {
+  client.subscribe('testtopic/1')
+  client.publish('testtopic/1', '5, 10, 20, normal')
+})
+
+
+/*
+message format:
+[duration, framerate, fps, mode]
+sample:
+[5, 10, 20, 'normal']
+*/
+
+client.on('message', function (topic, message) {
+  // message is Buffer
+  message = message.toString();
+  message = message.split(",");
+
+  const duration = message[0];
+  const framerate = message[1];
+  const fps = message[2];
+  const mode = message[3];
+  const name = generateRandomName();
+
+  exposeCamera(duration);
+
+  // wait until camera is exposed
+  setTimeout(function() {
+    generateJPGs(name);
+
+    // wait until jpegs are generated
+    setTimeout(function() {
+        createGif(name);
+    }, duration * 100);
+
+  }, duration * 1000);
+
+  client.end()
+})
 
 // file path var
 let gifPath = ``;
-
-// body-parser to get data from post request
-app.use(bodyParser.urlencoded({ extended: true}));
-
-// return only json
-app.use(bodyParser.json());
-
-// cross origin
-app.use(cors());
-
-// files as static
-app.use('/files', express.static('files'));
-
-
-// routes
-app.get('/expose', (req, res) => {
-    const name = generateRandomName();
-    exposeCamera(name, 10);
-
-    /* TODO get time from headers, insert into cutVideo(percent) */
-    // cutVideo(90);
-
-    setTimeout(function() {
-	generateJPGs(name);
-	console.log(`jpegs generated ${name}`);
-
-        setTimeout(function() {
-
-		createGif(name);
-        	console.log(`gif created ${name}`);
-
-        	res.json({
-            		message: `Camera exposed.`,
-            		path: getGifPath()
-        	});
-       }, 10000);
-
-    }, 10000);
-
-});
-
-// start Server
-app.listen(port, () => {
-    console.log('Listen on Port: ' + port);
-});
 
 /* Functions */
 function exposeCamera(path, time) {
@@ -99,12 +88,6 @@ function setGifPath(path) {
 
 function getGifPath() {
     return gifPath;
-}
-
-/* TODO */
-/* prrobably simply rename the last x percent of files based on percentage  */
-function cutVideo(percentageKept) {
-
 }
 
 function generateRandomName() {
