@@ -20,7 +20,7 @@ client.on('connect', function () {
 message format:
 [duration, framerate, fps, mode]
 sample:
-[5, 20, 'normal']
+['expose', 5, 20, 'normal']
 */
 
 client.on('message', function (topic, message) {
