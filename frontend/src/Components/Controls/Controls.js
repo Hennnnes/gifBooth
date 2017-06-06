@@ -6,14 +6,17 @@ const client = new window.Messaging.Client("broker.mqttdashboard.com", 8000, "my
 class Controls extends React.Component {
     constructor() {
         super();
+        this.state = {
+            path: '',
+            framerate: '',
+            fps: '',
+            mode: ''
+        }
 
         this.loadPath = this.loadPath.bind(this);
         this.forceUpdate = this.forceUpdate.bind(this);
         this.sendMessage = this.sendMessage.bind(this);
-
-        this.state = {
-            path: '',
-        }
+        this.handleChange = this.handleChange.bind(this);
     }
 
     loadPath() {
@@ -41,7 +44,7 @@ class Controls extends React.Component {
 
     componentDidMount(){
       var options = {
-          timeout: 3,
+          timeout: 5,
           //Gets Called if the connection has sucessfully been established
           onSuccess: function () {
               console.log("Connected");
@@ -54,7 +57,8 @@ class Controls extends React.Component {
       client.connect(options);
     }
 
-    sendMessage(payload, topic, qos) {
+    sendMessage(topic, qos) {
+        var payload = "expose, " + this.state.framerate + ", " + this.state.fps + ", " + this.state.mode;
         var message = new window.Messaging.Message(payload);
         message.destinationName = topic;
         message.qos = qos;
@@ -62,11 +66,31 @@ class Controls extends React.Component {
         console.log("button");
     }
 
+    handleChange(event){
+      const target = event.target;
+      const value = target.value;
+      const name = target.name;
+
+      this.setState({
+        [name]: value
+      });
+    }
+
     render() {
         return (
             <div>
+              <form>
+                Framrate:
+                <input name="framerate" type="text" value={this.state.framerate} onChange={this.handleChange}/>
+                <br />
+                FPS:
+                <input name="fps" type="text" value={this.state.fps} onChange={this.handleChange}/>
+                <br />
+                Mode:
+                <input name="mode" type="text" value={this.state.mode} onChange={this.handleChange}/>
+              </form>
 
-              <button className="btn" onClick={() => this.sendMessage("expose", "testtopic/1", 2)}>Create gif</button>
+              <button className="btn" onClick={() => this.sendMessage("testtopic/1", 2)}>Create gif</button>
 
               <a href={this.state.path} onChange={this.updateWindow}>asd</a>
             </div>
