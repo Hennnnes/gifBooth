@@ -40,7 +40,7 @@ client.on('message', function (topic, message) {
   const name = generateRandomName();
 
   // actiooooon
-  // exposeCamera(duration);
+  exposeCamera(duration);
   moveFile(name);
   generateGif(name, duration, fps);
 
@@ -76,5 +76,5 @@ function generateGif(name, duration, fps) {
 }
 
 function generateRandomName() {
-    return `${Date.now()}-${(Math.floor(Math.random() * 10000) + 1)}`;
+    return Date.now() + '-' + (Math.floor(Math.random() * 10000) + 1);
 }
