@@ -33,19 +33,20 @@ client.on('message', function (topic, message) {
       console.log('no expose message');
       return;
   }
+
   const duration = message[1];
   const fps = message[2];
   const mode = message[3];
   const name = generateRandomName();
 
   // actiooooon
-  exposeCamera(duration);
+  // exposeCamera(duration);
   moveFile(name);
   generateGif(name, duration, fps);
 
   // wait because it takes it's time
   setTimeout(function() {
-      var data = base64Img.base64Sync(`files/${name}/output.gif`);
+      var data = base64Img.base64Sync('files/' + name + '/output.gif');
 
       // publish data to topic
       client.publish('testtopic/1', data);
@@ -57,21 +58,21 @@ client.on('message', function (topic, message) {
 /* Functions */
 function exposeCamera(duration) {
     // delete movie if there should be one left
-    exec(`rm -rf movie.mjpg`);
+    exec('rm -rf movie.mjpg');
 
     // expose camera
-    exec(`gphoto2 --capture-movie=${duration}s`);
+    exec('gphoto2 --capture-movie=' + duration + 's');
 }
 
 function moveFile(filename) {
-    exec(`mkdir files/${filename}`);
-    exec(`mv movie.mjpg files/${filename}/movie.mjpg`);
+    exec('mkdir files/' + filename);
+    exec('mv movie.mjpg files/' + filename + '/movie.mjpg');
 }
 
 function generateGif(name, duration, fps) {
     // generate gif with custom palette
-    exec(`ffmpeg -t ${duration} -i files/${name}/movie.mjpg -filter_complex \
-"fps=${fps},scale=400:-1" files/${name}/output.gif`);
+    exec('ffmpeg -t ' + duration + ' -i files/' + name + '/movie.mjpg -filter_complex \
+"fps=' + fps + ',scale=400:-1" files/' + name + '/output.gif');
 }
 
 function generateRandomName() {
