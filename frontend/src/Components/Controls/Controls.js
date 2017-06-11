@@ -79,6 +79,7 @@ class Controls extends React.Component {
     render() {
         return (
             <div>
+              <h2>aks</h2>
               <form>
                 Framrate:
                 <input name="framerate" type="text" value={this.state.framerate} onChange={this.handleChange}/>
@@ -91,8 +92,8 @@ class Controls extends React.Component {
               </form>
 
               <button className="btn" onClick={() => this.sendMessage("testtopic/1", 2)}>Create gif</button>
-
-              <a href={this.state.path} onChange={this.updateWindow}>asd</a>
+              <br />
+              <a href={this.state.path} onChange={this.updateWindow}>Update Window</a>
             </div>
         );
     }
