@@ -53,7 +53,8 @@ client.on('message', function (topic, message) {
 
       client.end();
   }, 500);
-})
+});
+
 
 /* Functions */
 function exposeCamera(duration) {
@@ -71,8 +72,7 @@ function moveFile(filename) {
 
 function generateGif(name, duration, fps) {
     // generate gif with custom palette
-    exec('ffmpeg -t ' + duration + ' -i files/' + name + '/movie.mjpg -filter_complex \
-"fps=' + fps + ',scale=400:-1" files/' + name + '/output.gif');
+     exec('ffmpeg -t ' + duration + ' -i files/' + name + '/movie.mjpg -filter_complex \ "fps=' + fps + ',scale=400:-1" files/' + name + '/output.gif');
 }
 
 function generateRandomName() {
