@@ -1,7 +1,4 @@
-.previewBox {
-    width: 800px;
+.preview_image {
+    max-height: 300px;
     max-width: 100%;
-    height: 300px;
-    margin: 0 auto;
-    background-color: #aaa;
 }
