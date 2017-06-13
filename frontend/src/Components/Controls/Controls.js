@@ -17,6 +17,7 @@ class Controls extends React.Component {
         this.forceUpdate = this.forceUpdate.bind(this);
         this.sendMessage = this.sendMessage.bind(this);
         this.handleChange = this.handleChange.bind(this);
+        this.slider = this.slider.bind(this);
     }
 
     loadPath() {
@@ -55,6 +56,7 @@ class Controls extends React.Component {
           }
       }
       client.connect(options);
+      document.getElementsByTagName("h2")[0].innerHTML = "hello";
     }
 
     sendMessage(topic, qos) {
@@ -76,6 +78,10 @@ class Controls extends React.Component {
       });
     }
 
+    slider(){
+      console.log("test");
+    }
+
     render() {
         return (
             <div>
@@ -90,6 +96,12 @@ class Controls extends React.Component {
                 Mode:
                 <input name="mode" type="text" value={this.state.mode} onChange={this.handleChange}/>
               </form>
+
+              <ul onMouseDown={this.slider()}>
+                <li>5p/s</li>
+                <li>7p/s</li>
+                <li>12p/s</li>
+              </ul>
 
               <button className="btn" onClick={() => this.sendMessage("testtopic/1", 2)}>Create gif</button>
               <br />

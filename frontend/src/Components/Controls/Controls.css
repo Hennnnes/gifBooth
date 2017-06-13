@@ -20,3 +20,9 @@ div{
   margin: 0 auto;
   text-align: center;
 }
+
+ul li{
+  display: inline-block;
+  margin-right: 10px;
+  list-style: none;
+}
