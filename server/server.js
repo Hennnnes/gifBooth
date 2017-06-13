@@ -12,7 +12,7 @@ const exec = require('child_process').exec;
 /* TODO: sollte später vom client kommen! */
 client.on('connect', function () {
   client.subscribe('testtopic/1')
-  client.publish('testtopic/1', 'expose, 5, 20, normal')
+  //client.publish('testtopic/1', 'expose, 5, 20, normal')
 })
 
 
@@ -40,18 +40,18 @@ client.on('message', function (topic, message) {
   const name = generateRandomName();
 
   // actiooooon
-  exposeCamera(duration);
+  //	exposeCamera(duration);
   moveFile(name);
   generateGif(name, duration, fps);
 
   // wait because it takes it's time
   setTimeout(function() {
       var data = base64Img.base64Sync('files/' + name + '/output.gif');
-
+	
       // publish data to topic
-      client.publish('testtopic/1', data);
+      client.publish('testtopic/image', data);
 
-      client.end();
+      //client.end();
   }, 500);
 });
 
@@ -67,12 +67,12 @@ function exposeCamera(duration) {
 
 function moveFile(filename) {
     exec('mkdir files/' + filename);
-    exec('mv movie.mjpg files/' + filename + '/movie.mjpg');
+    exec('mv movie.mp4 files/' + filename + '/movie.mp4');
 }
 
 function generateGif(name, duration, fps) {
     // generate gif with custom palette
-     exec('ffmpeg -t ' + duration + ' -i files/' + name + '/movie.mjpg -filter_complex \ "fps=' + fps + ',scale=400:-1" files/' + name + '/output.gif');
+     exec('ffmpeg -t ' + duration + ' -i files/' + name + '/movie.mp4 -filter_complex \ "fps=' + fps + ',scale=400:-1" files/' + name + '/output.gif');
 }
 
 function generateRandomName() {
