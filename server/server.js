@@ -8,24 +8,20 @@ const base64Img = require('base64-img');
 const sys = require('util')
 const exec = require('child_process').exec;
 
-
-/* TODO: sollte später vom client kommen! */
 client.on('connect', function () {
-  client.subscribe('testtopic/1')
-  client.publish('testtopic/1', 'expose, 5, 20, normal')
+  client.subscribe('testtopic/gifBoothTest');
+  console.log('connected to testtopic/gifBoothTest')
 })
 
-
-/*
-message format:
-[duration, framerate, fps, mode]
-sample:
-['expose', 5, 20, 'normal']
-*/
-
+/* message format: ['expose', duration, fps, mode] */
 client.on('message', function (topic, message) {
   // message is Buffer
   message = message.toString();
+
+  const messageIsGif = (message.slice(0,21) === 'data:image/gif;base64');
+  if (messageIsGif) {
+      console.log('received gif');
+  }
 
   // split message and get values
   message = message.split(",");
@@ -33,7 +29,6 @@ client.on('message', function (topic, message) {
       console.log('no expose message');
       return;
   }
-
   const duration = message[1];
   const fps = message[2];
   const mode = message[3];
@@ -41,17 +36,18 @@ client.on('message', function (topic, message) {
 
   // actiooooon
   exposeCamera(duration);
+  createFolder(name);
   moveFile(name);
   generateGif(name, duration, fps);
 
   // wait because it takes it's time
   setTimeout(function() {
-      var data = base64Img.base64Sync('files/' + name + '/output.gif');
+      // var data = base64Img.base64Sync('files/' + name + '/output.gif');
+      var data = base64Img.base64Sync('test.gif');
 
       // publish data to topic
-      client.publish('testtopic/1', data);
-
-      client.end();
+      client.publish('testtopic/gifBoothTest', data);
+      console.log('Published: ' + data.slice(0,21));
   }, 500);
 });
 
@@ -65,8 +61,15 @@ function exposeCamera(duration) {
     exec('gphoto2 --capture-movie=' + duration + 's');
 }
 
-function moveFile(filename) {
+function createFolder(filename) {
     exec('mkdir files/' + filename);
+}
+
+function moveGif(filename) {
+
+}
+
+function moveVideo(filename) {
     exec('mv movie.mjpg files/' + filename + '/movie.mjpg');
 }
 
