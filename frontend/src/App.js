@@ -6,37 +6,18 @@ import Preview from './Components/Preview/Preview';
 import Controls from './Components/Controls/Controls';
 import Footer from './Components/Footer/Footer';
 
-let image = " ";
-
 const client = new window.Messaging.Client("broker.mqttdashboard.com", 8000, "myclientid_" + parseInt(Math.random() * 100, 10));
-//
-// client.onMessageArrived = function (message) {
-//     if(message.payloadString.substring(0, 21) == "data:image/gif;base64"){
-//       image = message.payloadString;
-//       //document.getElementById('image').src = message.payloadString;
-//       // document.getElementById('button').href = message.payloadString;
-//     }
-// };
-
 
 class App extends Component {
   constructor() {
       super();
 
       this.state = ({
-        fetch_url: 'http://api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&tag=waiting',
+        fetch_url: 'http://api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&tag=smile&waiting',
         img_url: ''
       })
 
   }
-
-  // onMessageArrived (message) {
-  //     if(message.payloadString.substring(0, 21) == "data:image/gif;base64"){
-  //       image = message.payloadString;
-  //       //document.getElementById('image').src = message.payloadString;
-  //       // document.getElementById('button').href = message.payloadString;
-  //     }
-  // };
 
   componentDidMount() {
       fetch(this.state.fetch_url, { method: 'GET' })
@@ -56,12 +37,15 @@ class App extends Component {
           //Gets Called if the connection has sucessfully been established
           onSuccess: function () {
               console.log("Connected");
+
               client.subscribe('testtopic/image', {qos: 2});
+
               client.onMessageArrived = function(message){
                 if(message.payloadString.substring(0, 21) == "data:image/gif;base64"){
                   this.setState({img_url: message.payloadString})
                 }
               }.bind(this);
+
           }.bind(this),
           //Gets Called if the connection could not be established
           onFailure: function (message) {
@@ -84,7 +68,7 @@ class App extends Component {
       <div className="app">
         <Header />
         <Preview url={this.state.img_url} />
-        <Controls onSubmit={(controlsFPS, controlsMode, controlsDuration) => this.sendMessage(controlsFPS, controlsMode, controlsDuration)}/>
+        <Controls url={this.state.img_url} onSubmit={(controlsFPS, controlsMode, controlsDuration) => this.sendMessage(controlsFPS, controlsMode, controlsDuration)}/>
       </div>
     );
   }

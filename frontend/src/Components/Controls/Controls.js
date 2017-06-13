@@ -11,33 +11,7 @@ class Controls extends React.Component {
             duration: '',
             mode: '',
         }
-
-        this.loadPath = this.loadPath.bind(this);
-        this.forceUpdate = this.forceUpdate.bind(this);
         this.handleChange = this.handleChange.bind(this);
-    }
-
-    loadPath() {
-        fetch('http://raspi11.local:8080/expose')
-        .then(response => {
-          if (!response.ok) {
-            throw Error(response.error);
-          }
-
-          return response.json();
-        })
-        .then(result => {
-            console.log(result.path);
-            this.setState({path: `http://raspi11.local:8080/${result.path}`});
-		this.forceUpdate();
-        })
-        .catch(error => {
-          console.log('error');
-        })
-    }
-
-    updateWindow() {
-        this.forceUpdate();
     }
 
     handleChange(event){
@@ -53,10 +27,8 @@ class Controls extends React.Component {
     render() {
         return (
             <div>
-              <h2>aks</h2>
 
-              <img id="image" src="http://www.reactiongifs.com/r/tcs.gif" />
-              <a id="button" href="" download="test.gif">Download image</a>
+              <a id="button" href={this.props.url} download="test.gif">Download image</a>
               <form>
                 FPS:
                 <input name="fps" type="text" value={this.state.fps} onChange={this.handleChange}/>
@@ -76,7 +48,7 @@ class Controls extends React.Component {
 
               <button className="btn" onClick={(controlsFPS, controlsMode, controlsDuration) => this.props.onSubmit(this.state.fps, this.state.mode, this.state.duration)}></button>
               <br />
-              {/* <a href={this.state.path} onChange={this.updateWindow}>Update Window</a> */}
+
             </div>
         );
     }
