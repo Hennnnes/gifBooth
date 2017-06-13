@@ -9,14 +9,15 @@ import Footer from './Components/Footer/Footer';
 let image = " ";
 
 const client = new window.Messaging.Client("broker.mqttdashboard.com", 8000, "myclientid_" + parseInt(Math.random() * 100, 10));
+//
+// client.onMessageArrived = function (message) {
+//     if(message.payloadString.substring(0, 21) == "data:image/gif;base64"){
+//       image = message.payloadString;
+//       //document.getElementById('image').src = message.payloadString;
+//       // document.getElementById('button').href = message.payloadString;
+//     }
+// };
 
-client.onMessageArrived = function (message) {
-    if(message.payloadString.substring(0, 21) == "data:image/gif;base64"){
-      image = message.payloadString;
-      //document.getElementById('image').src = message.payloadString;
-      // document.getElementById('button').href = message.payloadString;
-    }
-};
 
 class App extends Component {
   constructor() {
@@ -28,6 +29,14 @@ class App extends Component {
       })
 
   }
+
+  // onMessageArrived (message) {
+  //     if(message.payloadString.substring(0, 21) == "data:image/gif;base64"){
+  //       image = message.payloadString;
+  //       //document.getElementById('image').src = message.payloadString;
+  //       // document.getElementById('button').href = message.payloadString;
+  //     }
+  // };
 
   componentDidMount() {
       fetch(this.state.fetch_url, { method: 'GET' })
@@ -42,13 +51,18 @@ class App extends Component {
           this.setState({ img_url: result.data.image_url });
       })
 
-      var options = {
+      const options = {
           timeout: 5,
           //Gets Called if the connection has sucessfully been established
           onSuccess: function () {
               console.log("Connected");
               client.subscribe('testtopic/image', {qos: 2});
-          },
+              client.onMessageArrived = function(message){
+                if(message.payloadString.substring(0, 21) == "data:image/gif;base64"){
+                  this.setState({img_url: message.payloadString})
+                }
+              }.bind(this);
+          }.bind(this),
           //Gets Called if the connection could not be established
           onFailure: function (message) {
               console.log("Connection failed: " + message.errorMessage);
