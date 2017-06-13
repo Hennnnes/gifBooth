@@ -7,15 +7,14 @@ class Controls extends React.Component {
         super();
         this.state = {
             path: '',
-            framerate: '',
             fps: '',
+            duration: '',
             mode: '',
         }
 
         this.loadPath = this.loadPath.bind(this);
         this.forceUpdate = this.forceUpdate.bind(this);
         this.handleChange = this.handleChange.bind(this);
-        this.slider = this.slider.bind(this);
     }
 
     loadPath() {
@@ -51,14 +50,6 @@ class Controls extends React.Component {
       });
     }
 
-    slider(){
-      console.log("test");
-    }
-
-    send(){
-      this.props.onClick(this.state.framerate);
-    }
-
     render() {
         return (
             <div>
@@ -67,23 +58,23 @@ class Controls extends React.Component {
               <img id="image" src="http://www.reactiongifs.com/r/tcs.gif" />
               <a id="button" href="" download="test.gif">Download image</a>
               <form>
-                Framrate:
-                <input name="framerate" type="text" value={this.state.framerate} onChange={this.handleChange}/>
-                <br />
                 FPS:
                 <input name="fps" type="text" value={this.state.fps} onChange={this.handleChange}/>
+                <br />
+                Duration:
+                <input name="duration" type="text" value={this.state.duration} onChange={this.handleChange}/>
                 <br />
                 Mode:
                 <input name="mode" type="text" value={this.state.mode} onChange={this.handleChange}/>
               </form>
 
-              <ul onMouseDown={this.slider()}>
+              <ul>
                 <li>5p/s</li>
                 <li>7p/s</li>
                 <li>12p/s</li>
               </ul>
 
-              <button className="btn" onClick={() => this.send()}></button>
+              <button className="btn" onClick={(controlsFPS, controlsMode, controlsDuration) => this.props.onSubmit(this.state.fps, this.state.mode, this.state.duration)}></button>
               <br />
               {/* <a href={this.state.path} onChange={this.updateWindow}>Update Window</a> */}
             </div>

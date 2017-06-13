@@ -9,56 +9,34 @@ import Footer from './Components/Footer/Footer';
 let image = " ";
 
 const client = new window.Messaging.Client("broker.mqttdashboard.com", 8000, "myclientid_" + parseInt(Math.random() * 100, 10));
+//
+// client.onMessageArrived = function (message) {
+//     if(message.payloadString.substring(0, 21) == "data:image/gif;base64"){
+//       image = message.payloadString;
+//       //document.getElementById('image').src = message.payloadString;
+//       // document.getElementById('button').href = message.payloadString;
+//     }
+// };
 
-client.onMessageArrived = function (message) {
-    if(message.payloadString.substring(0, 21) == "data:image/gif;base64"){
-      image = message.payloadString;
-      // document.getElementById('image').src = message.payloadString;
-      // document.getElementById('button').href = message.payloadString;
-    }
-};
 
 class App extends Component {
   constructor() {
       super();
 
       this.state = ({
-        framerate: '',
         fetch_url: 'http://api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&tag=waiting',
         img_url: ''
       })
+
   }
 
-  componentDidMount(){
-    var options = {
-        timeout: 5,
-        //Gets Called if the connection has sucessfully been established
-        onSuccess: function () {
-            console.log("Connected");
-            client.subscribe('testtopic/image', {qos: 2});
-        },
-        //Gets Called if the connection could not be established
-        onFailure: function (message) {
-            console.log("Connection failed: " + message.errorMessage);
-        }
-    }
-    client.connect(options);
-    document.getElementsByTagName("h2")[0].innerHTML = "hello";
-  }
-
-  sendMessage(value) {
-      this.setState({
-        framerate: value
-      });
-      console.log(this.state.frame);
-      var payload = "test";
-      // var payload = "expose, " + this.state.framerate + ", " + this.state.fps + ", " + this.state.mode;
-      var message = new window.Messaging.Message(payload);
-      message.destinationName = 'testtopic/bar';
-      message.qos = 2;
-      client.send(message);
-      console.log("button");
-  }
+  // onMessageArrived (message) {
+  //     if(message.payloadString.substring(0, 21) == "data:image/gif;base64"){
+  //       image = message.payloadString;
+  //       //document.getElementById('image').src = message.payloadString;
+  //       // document.getElementById('button').href = message.payloadString;
+  //     }
+  // };
 
   componentDidMount() {
       fetch(this.state.fetch_url, { method: 'GET' })
@@ -72,15 +50,41 @@ class App extends Component {
       .then(result => {
           this.setState({ img_url: result.data.image_url });
       })
+
+      const options = {
+          timeout: 5,
+          //Gets Called if the connection has sucessfully been established
+          onSuccess: function () {
+              console.log("Connected");
+              client.subscribe('testtopic/image', {qos: 2});
+              client.onMessageArrived = function(message){
+                if(message.payloadString.substring(0, 21) == "data:image/gif;base64"){
+                  this.setState({img_url: message.payloadString})
+                }
+              }.bind(this);
+          }.bind(this),
+          //Gets Called if the connection could not be established
+          onFailure: function (message) {
+              console.log("Connection failed: " + message.errorMessage);
+          }
+      }
+      client.connect(options);
   }
 
+  sendMessage(controlsFPS, controlsMode, controlsDuration) {
+      var payload = "expose, " + controlsDuration + ", " + controlsFPS + ", " + controlsMode;
+      var message = new window.Messaging.Message(payload);
+      message.destinationName = 'testtopic/bar';
+      message.qos = 2;
+      client.send(message);
+  }
 
   render() {
     return (
       <div className="app">
         <Header />
         <Preview url={this.state.img_url} />
-        <Controls onClick={() => this.sendMessage()}/>
+        <Controls onSubmit={(controlsFPS, controlsMode, controlsDuration) => this.sendMessage(controlsFPS, controlsMode, controlsDuration)}/>
       </div>
     );
   }
