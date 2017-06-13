@@ -1,7 +1,18 @@
 import React from 'react';
 import './Controls.css';
 
+let image = '';
+
 const client = new window.Messaging.Client("broker.mqttdashboard.com", 8000, "myclientid_" + parseInt(Math.random() * 100, 10));
+
+client.onMessageArrived = function (message) {
+    if(message.payloadString.substring(0, 21) == "data:image/gif;base64"){
+      image = message.payloadString;
+      document.getElementById('image').src = message.payloadString;
+      document.getElementById('button').href = message.payloadString;
+    }
+};
+
 
 class Controls extends React.Component {
     constructor() {
@@ -10,7 +21,7 @@ class Controls extends React.Component {
             path: '',
             framerate: '',
             fps: '',
-            mode: ''
+            mode: '',
         }
 
         this.loadPath = this.loadPath.bind(this);
@@ -49,6 +60,7 @@ class Controls extends React.Component {
           //Gets Called if the connection has sucessfully been established
           onSuccess: function () {
               console.log("Connected");
+              client.subscribe('testtopic/image', {qos: 2});
           },
           //Gets Called if the connection could not be established
           onFailure: function (message) {
@@ -106,6 +118,8 @@ class Controls extends React.Component {
               <button className="btn" onClick={() => this.sendMessage("testtopic/1", 2)}>Create gif</button>
               <br />
               <a href={this.state.path} onChange={this.updateWindow}>Update Window</a>
+              <img id="image" src="" />
+              <a id="button" href="" download="test.gif">Download image</a>
             </div>
         );
     }
