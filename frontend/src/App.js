@@ -38,7 +38,7 @@ class App extends Component {
           onSuccess: function () {
               console.log("Connected");
 
-              client.subscribe('testtopic/image', {qos: 2});
+              client.subscribe('testtopic/gifBoothTest', {qos: 2});
 
               client.onMessageArrived = function(message){
                 if(message.payloadString.substring(0, 21) == "data:image/gif;base64"){
@@ -58,7 +58,7 @@ class App extends Component {
   sendMessage(controlsFPS, controlsMode, controlsDuration) {
       var payload = "expose, " + controlsDuration + ", " + controlsFPS + ", " + controlsMode;
       var message = new window.Messaging.Message(payload);
-      message.destinationName = 'testtopic/bar';
+      message.destinationName = 'testtopic/gifBoothTest';
       message.qos = 2;
       client.send(message);
   }
