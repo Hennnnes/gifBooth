@@ -35,20 +35,30 @@ client.on('message', function (topic, message) {
   const name = generateRandomName();
 
   // actiooooon
-  exposeCamera(duration);
-  createFolder(name);
-  moveFile(name);
-  generateGif(name, duration, fps);
-
-  // wait because it takes it's time
   setTimeout(function() {
-      // var data = base64Img.base64Sync('files/' + name + '/output.gif');
-      var data = base64Img.base64Sync('files/' + name + '/output.gif');
+    exposeCamera(duration);
 
-      // publish data to topic
-      client.publish('testtopic/gifBoothTest', data);
-      console.log('Published: ' + data.slice(0,21));
-  }, 500);
+    setTimeout(function() {
+        createFolder(name);
+        moveVideo(name);
+
+        setTimeout(function() {
+            generateGif(name, duration, fps);
+
+            // wait because it takes it's time
+            setTimeout(function() {
+                // var data = base64Img.base64Sync('files/' + name + '/output.gif');
+                var data = base64Img.base64Sync('files/' + name + '/output.gif');
+
+                // publish data to topic
+                client.publish('testtopic/gifBoothTest', data);
+                console.log('Published: ' + data.slice(0,21));
+            }, 500);
+        }, 1000);
+
+    }, 500);
+  }, duration * 100);
+
 });
 
 
