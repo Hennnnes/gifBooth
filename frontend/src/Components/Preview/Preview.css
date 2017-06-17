@@ -7,8 +7,7 @@
 }
 
 .download_button {
-    opacity: 0;
-    display: block;
+    display: none;
     padding: 10px 20px;
     margin: 0 auto 20px auto;
     background-color: #CF4647;
@@ -27,5 +26,5 @@
 }
 
 .download_button.active {
-    opacity: 1;
+    display: block;
 }
