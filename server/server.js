@@ -13,6 +13,10 @@ client.on('connect', function () {
   console.log('connected to testtopic/gifBoothTest')
 })
 
+client.on('disconnect', functon()  {
+    console.log('disconnected');
+})
+
 /* message format: ['expose', duration, fps, mode] */
 client.on('message', function (topic, message) {
   // message is Buffer
@@ -29,10 +33,18 @@ client.on('message', function (topic, message) {
       console.log('no expose message');
       return;
   }
-  const duration = message[1];
-  const fps = message[2];
+  const duration = message[1].parseInt();
+  const fps = message[2].parseInt();
   const mode = message[3];
   const name = generateRandomName();
+
+  // ensure variables are in range
+  duration = (duration < 1) ? 1 : duration;
+  duration = (duration > 5) ? 5 : duration:;
+  fps = (fps < 2) ? 2 : fps;
+  fps = (fps > 8) ? 8 : fps;
+  mode = (mode === 'normal' || mode === 'boomerang') ? mode : 'normal';
+
 
   // actiooooon
   setTimeout(function() {
