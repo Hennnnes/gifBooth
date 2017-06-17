@@ -9,7 +9,7 @@ class Controls extends React.Component {
             path: '',
             fps: '',
             duration: '',
-            mode: '',
+            mode: ''
         }
         this.handleChange = this.handleChange.bind(this);
     }
@@ -24,9 +24,7 @@ class Controls extends React.Component {
 
     render() {
         return (
-            <div>
-
-              <a id="button" href={this.props.url} download="test.gif">Download image</a>
+            <div>              
               <form>
                 FPS:
                 <input name="fps" type="text" value={this.state.fps} onChange={this.handleChange}/>
@@ -44,7 +42,7 @@ class Controls extends React.Component {
                 <li>12p/s</li>
               </ul>
 
-              <button className="btn" onClick={(controlsFPS, controlsMode, controlsDuration) => this.props.onSubmit(this.state.fps, this.state.mode, this.state.duration)}></button>
+              <button className="btn" onClick={(controlsFPS, controlsMode, controlsDuration) => this.props.onSubmit(this.state.fps, this.state.mode, this.state.duration)} />
               <br />
 
             </div>

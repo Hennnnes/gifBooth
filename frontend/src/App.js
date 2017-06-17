@@ -14,7 +14,8 @@ class App extends Component {
 
       this.state = ({
         fetch_url: `http://api.giphy.com/v1/gifs/random?api_key=${api_key}&tag=smile&waiting`,
-        img_url: ''
+        img_url: '',
+        customImage: false
       })
 
   }
@@ -36,14 +37,16 @@ class App extends Component {
           timeout: 5,
           //Gets Called if the connection has sucessfully been established
           onSuccess: function () {
-
               console.log('connected to mqtt broker');
               client.subscribe('testtopic/gifBoothTest', {qos: 2});
               console.log('subscribed to topic');
 
               client.onMessageArrived = function(message){
                 if(message.payloadString.substring(0, 21) === 'data:image/gif;base64') {
-                  this.setState({ img_url: message.payloadString })
+                  this.setState({
+                      img_url: message.payloadString,
+                      customImage: true
+                  });
                 }
               }.bind(this);
           }.bind(this),
@@ -69,7 +72,7 @@ class App extends Component {
     return (
       <div className="app">
         <Header />
-        <Preview url={this.state.img_url} />
+        <Preview url={this.state.img_url} customImage={this.state.customImage}/>
         <Controls url={this.state.img_url} onSubmit={(controlsFPS, controlsMode, controlsDuration) => this.sendMessage(controlsFPS, controlsMode, controlsDuration)}/>
       </div>
     );

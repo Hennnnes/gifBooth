@@ -1,4 +1,31 @@
 .preview_image {
+    display: block;
     max-height: 300px;
     max-width: 100%;
+    margin: 0 auto 20px auto;
+
+}
+
+.download_button {
+    opacity: 0;
+    display: block;
+    padding: 10px 20px;
+    margin: 0 auto 20px auto;
+    background-color: #CF4647;
+    color: white;
+    border: 0;
+    border-bottom: 4px solid #fcc9c9;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.download_button:active,
+.download_button:hover,
+.download_button:focus {
+    transform: translateY(2px);
+    border-bottom-color: white;
+}
+
+.download_button.active {
+    opacity: 1;
 }
