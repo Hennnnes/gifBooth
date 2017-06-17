@@ -4,16 +4,16 @@ import './App.css';
 import Header from './Components/Header/Header';
 import Preview from './Components/Preview/Preview';
 import Controls from './Components/Controls/Controls';
-import Footer from './Components/Footer/Footer';
 
-const client = new window.Messaging.Client("broker.mqttdashboard.com", 8000, "myclientid_" + parseInt(Math.random() * 100, 10));
+const client = new window.Messaging.Client(`broker.mqttdashboard.com`, 8000, `myclientid_${parseInt(Math.random() * 100, 10)}`);
 
 class App extends Component {
   constructor() {
       super();
+      const api_key = 'dc6zaTOxFJmzC';
 
       this.state = ({
-        fetch_url: 'http://api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&tag=smile&waiting',
+        fetch_url: `http://api.giphy.com/v1/gifs/random?api_key=${api_key}&tag=smile&waiting`,
         img_url: ''
       })
 
@@ -36,31 +36,33 @@ class App extends Component {
           timeout: 5,
           //Gets Called if the connection has sucessfully been established
           onSuccess: function () {
-              console.log("Connected");
 
+              console.log('connected to mqtt broker');
               client.subscribe('testtopic/gifBoothTest', {qos: 2});
+              console.log('subscribed to topic');
 
               client.onMessageArrived = function(message){
-                if(message.payloadString.substring(0, 21) == "data:image/gif;base64"){
-                  this.setState({img_url: message.payloadString})
+                if(message.payloadString.substring(0, 21) === 'data:image/gif;base64') {
+                  this.setState({ img_url: message.payloadString })
                 }
               }.bind(this);
-
           }.bind(this),
+
           //Gets Called if the connection could not be established
           onFailure: function (message) {
-              console.log("Connection failed: " + message.errorMessage);
+              console.log(`Connection failed: ${message.errorMessage}`);
           }
       }
       client.connect(options);
   }
 
   sendMessage(controlsFPS, controlsMode, controlsDuration) {
-      var payload = "expose, " + controlsDuration + ", " + controlsFPS + ", " + controlsMode;
-      var message = new window.Messaging.Message(payload);
+      const payload = `expose, ${controlsDuration}, ${controlsFPS}, ${controlsMode}`;
+      const message = new window.Messaging.Message(payload);
       message.destinationName = 'testtopic/gifBoothTest';
       message.qos = 2;
       client.send(message);
+      console.log('message send');
   }
 
   render() {
