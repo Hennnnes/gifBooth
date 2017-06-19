@@ -7,9 +7,9 @@ class Controls extends React.Component {
         super();
         this.state = {
             path: '',
-            fps: '',
-            duration: '',
-            mode: ''
+            fps: '5',
+            duration: '2',
+            mode: 'normal',
         }
         this.handleChange = this.handleChange.bind(this);
     }
@@ -24,27 +24,52 @@ class Controls extends React.Component {
 
     render() {
         return (
-            <div>              
+            <div>
               <form>
-                FPS:
-                <input name="fps" type="text" value={this.state.fps} onChange={this.handleChange}/>
-                <br />
-                Duration:
-                <input name="duration" type="text" value={this.state.duration} onChange={this.handleChange}/>
-                <br />
-                Mode:
-                <input name="mode" type="text" value={this.state.mode} onChange={this.handleChange}/>
+                  <fieldset>
+                      <label className={ this.state.fps === '5' ? 'selected ' : ''}>
+                        <input type="radio" name="fps" value="5" checked={this.state.fps === '5'} onChange={this.handleChange}/>
+                        5ps
+                      </label>
+                      <label className={ this.state.fps === '10' ? 'selected ' : ''}>
+                        <input type="radio" name="fps" value="10" checked={this.state.fps === '10'} onChange={this.handleChange}/>
+                        10fps
+                      </label>
+                      <label className={ this.state.fps === '20' ? 'selected ' : ''}>
+                        <input type="radio" name="fps" value="20" checked={this.state.fps === '20'} onChange={this.handleChange}/>
+                        20fps
+                      </label>
+                  </fieldset>
+
+                  <fieldset>
+                      <label className={ this.state.duration === '1' ? 'selected ' : ''}>
+                        <input type="radio" name="duration" value="1" checked={this.state.duration === '1'} onChange={this.handleChange}/>
+                        1sek.
+                      </label>
+                      <label className={ this.state.duration === '2' ? 'selected ' : ''}>
+                        <input type="radio" name="duration" value="2" checked={this.state.duration === '2'} onChange={this.handleChange}/>
+                        2sek.
+                      </label>
+                      <label className={ this.state.duration === '5' ? 'selected ' : ''}>
+                        <input type="radio" name="duration" value="5" checked={this.state.duration === '5'} onChange={this.handleChange}/>
+                        5sek.
+                      </label>
+                  </fieldset>
+
+                  <fieldset>
+                      <label className={ this.state.mode === 'normal' ? 'selected ' : ''}>
+                        <input type="radio" name="mode" value="normal" checked={this.state.mode === 'normal'} onChange={this.handleChange}/>
+                        Normal
+                      </label>
+                      <label className={ this.state.mode === 'boomerang' ? 'selected ' : ''}>
+                        <input type="radio" name="mode" value="boomerang" checked={this.state.mode === 'boomerang'} onChange={this.handleChange}/>
+                        Boomerang
+                      </label>
+                  </fieldset>
+
+                  <button className="btn" onClick={(controlsFPS, controlsMode, controlsDuration) => this.props.onSubmit(this.state.fps, this.state.mode, this.state.duration)} />
+
               </form>
-
-              <ul>
-                <li>5p/s</li>
-                <li>7p/s</li>
-                <li>12p/s</li>
-              </ul>
-
-              <button className="btn" onClick={(controlsFPS, controlsMode, controlsDuration) => this.props.onSubmit(this.state.fps, this.state.mode, this.state.duration)} />
-              <br />
-
             </div>
         );
     }
