@@ -61,13 +61,13 @@ client.on('message', function (topic, message) {
       console.log('video moved');
 
       if (mode === 'boomerang'){
-          reverseMovie();
-          combineMovies();
+          reverseMovie(name);
+          combineMovies(name);
       } else if (mode === 'reverse') {
-          reverseMovie();
-          renameReverseMovie();
+          reverseMovie(name);
+          renameReverseMovie(name);
       } else {
-          renameNormalMovie();
+          renameNormalMovie(name);
       }
 
 
