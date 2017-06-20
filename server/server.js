@@ -8,8 +8,6 @@ const base64Img = require('base64-img');
 const sys = require('util')
 const exec = require('child_process').exec;
 
-function puts(error, stdout, stderr) { sys.puts(stdout) }
-
 client.on('connect', function () {
   client.subscribe('testtopic/gifBoothTest');
   console.log('connected to testtopic/gifBoothTest')
@@ -71,23 +69,53 @@ client.on('message', function (topic, message) {
 /* Functions */
 function exposeCamera(duration) {
     // delete movie if there should be one left
-    exec('rm -rf movie.mjpg', puts);
+    exec('rm -rf movie.mjpg', function (error, stdout, stderr) {
+      sys.print('stdout: ' + stdout);
+      sys.print('stderr: ' + stderr);
+      if (error !== null) {
+        console.log('exec error: ' + error);
+      }
+    });
 
     // expose camera
-    exec('gphoto2 --capture-movie='+duration+'s', puts);
+    exec('gphoto2 --capture-movie='+duration+'s', function (error, stdout, stderr) {
+      sys.print('stdout: ' + stdout);
+      sys.print('stderr: ' + stderr);
+      if (error !== null) {
+        console.log('exec error: ' + error);
+      }
+    });
 }
 
 function createFolder(filename) {
-    exec('mkdir files/' + filename, puts);
+    exec('mkdir files/' + filename, function (error, stdout, stderr) {
+      sys.print('stdout: ' + stdout);
+      sys.print('stderr: ' + stderr);
+      if (error !== null) {
+        console.log('exec error: ' + error);
+      }
+    });
 }
 
 function moveVideo(filename) {
-    exec('mv movie.mjpg files/' + filename + '/movie.mjpg', puts);
+    exec('mv movie.mjpg files/' + filename + '/movie.mjpg', function (error, stdout, stderr) {
+      sys.print('stdout: ' + stdout);
+      sys.print('stderr: ' + stderr);
+      if (error !== null) {
+        console.log('exec error: ' + error);
+      }
+    });
 }
 
 function generateGif(name, duration, fps) {
     // generate gif with custom palette
-     exec('ffmpeg -t ' + duration + ' -i files/' + name + '/movie.mjpg -filter_complex \ "fps=' + fps + ',scale=400:-1" files/' + name + '/output.gif', puts);
+     exec('ffmpeg -t ' + duration + ' -i files/' + name + '/movie.mjpg -filter_complex \ "fps=' + fps + ',scale=400:-1" files/' + name + '/output.gif', function (error, stdout, stderr) {
+      sys.print('stdout: ' + stdout);
+      sys.print('stderr: ' + stderr);
+      if (error !== null) {
+        console.log('exec error: ' + error);
+      }
+    });
 }
 
 function generateRandomName() {
