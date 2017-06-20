@@ -30,12 +30,12 @@ client.on('message', function (topic, message) {
       console.log('received gif');
   }
 
-  // split message and get values
-  message = message.split(",");+
-
-  if (message[0] === 'free?') {
+  if (message.slice(0,5) === 'free?') {
       client.publish('testtopic/gifBoothTest', 'free: ' + serverIsFree);
   }
+
+  // split message and get values
+  message = message.split(",");+
 
   if (message[0] != 'expose') {
       console.log('no expose message');
