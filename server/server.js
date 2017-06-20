@@ -35,7 +35,7 @@ client.on('message', function (topic, message) {
   }
 
   // split message and get values
-  message = message.split(",");+
+  message = message.split(",");
 
   if (message[0] != 'expose') {
       console.log('no expose message');
