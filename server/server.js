@@ -61,11 +61,11 @@ client.on('message', function (topic, message) {
                 // publish data to topic
                 client.publish('testtopic/gifBoothTest', data);
                 console.log('Published: ' + data.slice(0,21));
-            }, 1000);
-        }, 5000);
+            }, duration * 100);
+        }, duration * 200);
 
     }, 1000);
-    }, 6000);
+}, duration * 100 + 1000);
 
 });
 
@@ -76,23 +76,20 @@ function exposeCamera(duration) {
     exec('rm -rf movie.mjpg');
 
     // expose camera
-    exec('gphoto2 --capture-movie=5s');
+    exec('gphoto2 --capture-movie='+duration+'s');
 }
 
 function createFolder(filename) {
     exec('mkdir files/' + filename);
-
 }
 
 function moveVideo(filename) {
     exec('mv movie.mjpg files/' + filename + '/movie.mjpg');
-    // if mp4
-    // exec('mv movie.mp4 files/' + filename + '/movie.mp4');
 }
 
 function generateGif(name, duration, fps) {
     // generate gif with custom palette
-     exec('ffmpeg -t 5 -i files/' + name + '/movie.mjpg -filter_complex \ "fps=' + fps + ',scale=400:-1" files/' + name + '/output.gif');
+     exec('ffmpeg -t ' + duration + ' -i files/' + name + '/movie.mjpg -filter_complex \ "fps=' + fps + ',scale=400:-1" files/' + name + '/output.gif');
 }
 
 function generateRandomName() {
