@@ -13,9 +13,10 @@ client.on('connect', function () {
   console.log('connected to testtopic/gifBoothTest')
 })
 
-client.on('disconnect', functon()  {
-    console.log('disconnected');
+client.on('disconnected', function () {
+  console.log('disconnected')
 })
+
 
 /* message format: ['expose', duration, fps, mode] */
 client.on('message', function (topic, message) {
@@ -40,7 +41,7 @@ client.on('message', function (topic, message) {
 
   // ensure variables are in range
   duration = (duration < 1) ? 1 : duration;
-  duration = (duration > 5) ? 5 : duration:;
+  duration = (duration > 5) ? 5 : duration;
   fps = (fps < 2) ? 2 : fps;
   fps = (fps > 8) ? 8 : fps;
   mode = (mode === 'normal' || mode === 'boomerang') ? mode : 'normal';
