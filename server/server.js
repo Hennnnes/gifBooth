@@ -70,8 +70,8 @@ client.on('message', function (topic, message) {
 function exposeCamera(duration) {
     // delete movie if there should be one left
     exec('rm -rf movie.mjpg', function (error, stdout, stderr) {
-      sys.print('stdout: ' + stdout);
-      sys.print('stderr: ' + stderr);
+      console.log('stdout: ' + stdout);
+      console.log('stderr: ' + stderr);
       if (error !== null) {
         console.log('exec error: ' + error);
       }
@@ -79,8 +79,8 @@ function exposeCamera(duration) {
 
     // expose camera
     exec('gphoto2 --capture-movie='+duration+'s', function (error, stdout, stderr) {
-      sys.print('stdout: ' + stdout);
-      sys.print('stderr: ' + stderr);
+      console.log('stdout: ' + stdout);
+      console.log('stderr: ' + stderr);
       if (error !== null) {
         console.log('exec error: ' + error);
       }
@@ -89,8 +89,8 @@ function exposeCamera(duration) {
 
 function createFolder(filename) {
     exec('mkdir files/' + filename, function (error, stdout, stderr) {
-      sys.print('stdout: ' + stdout);
-      sys.print('stderr: ' + stderr);
+      console.log('stdout: ' + stdout);
+      console.log('stderr: ' + stderr);
       if (error !== null) {
         console.log('exec error: ' + error);
       }
@@ -99,8 +99,8 @@ function createFolder(filename) {
 
 function moveVideo(filename) {
     exec('mv movie.mjpg files/' + filename + '/movie.mjpg', function (error, stdout, stderr) {
-      sys.print('stdout: ' + stdout);
-      sys.print('stderr: ' + stderr);
+      console.log('stdout: ' + stdout);
+      console.log('stderr: ' + stderr);
       if (error !== null) {
         console.log('exec error: ' + error);
       }
@@ -110,8 +110,8 @@ function moveVideo(filename) {
 function generateGif(name, duration, fps) {
     // generate gif with custom palette
      exec('ffmpeg -t ' + duration + ' -i files/' + name + '/movie.mjpg -filter_complex \ "fps=' + fps + ',scale=400:-1" files/' + name + '/output.gif', function (error, stdout, stderr) {
-      sys.print('stdout: ' + stdout);
-      sys.print('stderr: ' + stderr);
+      console.log('stdout: ' + stdout);
+      console.log('stderr: ' + stderr);
       if (error !== null) {
         console.log('exec error: ' + error);
       }
