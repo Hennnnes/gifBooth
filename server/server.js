@@ -8,6 +8,8 @@ const base64Img = require('base64-img');
 const sys = require('util')
 const exec = require('child_process').exec;
 
+let serverIsFree = true;
+
 client.on('connect', function () {
   client.subscribe('testtopic/gifBoothTest');
   console.log('connected to testtopic/gifBoothTest')
@@ -29,11 +31,22 @@ client.on('message', function (topic, message) {
   }
 
   // split message and get values
-  message = message.split(",");
+  message = message.split(",");+
+
+  if (message[0] === 'free?') {
+      client.publish('testtopic/gifBoothTest', 'free: ' + serverIsFree);
+  }
+
   if (message[0] != 'expose') {
       console.log('no expose message');
       return;
   }
+  if (!serverIsFree) {
+      console.log('server already in use');
+      return;
+  }
+
+  serverIsFree = false;
   const duration = parseInt(message[1].replace(' ', '')) + 1;
   const fps = message[2].replace(' ', '');
   const mode = message[3].replace(' ', '');
@@ -58,6 +71,7 @@ client.on('message', function (topic, message) {
               setTimeout(function() {
                   client.publish('testtopic/gifBoothTest', data);
                   console.log('Published: ' + data.slice(0,21));
+                  serverIsFree = true;
               }, 2000);
           }, 4000);
       }, 1000);

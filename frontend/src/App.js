@@ -15,7 +15,8 @@ class App extends Component {
       this.state = ({
         fetch_url: `http://api.giphy.com/v1/gifs/random?api_key=${api_key}&tag=smile&waiting`,
         img_url: '',
-        customImage: false
+        customImage: false,
+        serverIsFree: 'false'
       })
 
   }
@@ -41,7 +42,21 @@ class App extends Component {
               client.subscribe('testtopic/gifBoothTest', {qos: 2});
               console.log('subscribed to topic');
 
+              // send is free message
+              const message = new window.Messaging.Message('free?');
+              message.destinationName = 'testtopic/gifBoothTest';
+              message.qos = 2;
+              client.send(message);
+              console.log('is free message send');
+
+
+
               client.onMessageArrived = function(message){
+                if(message.payloadString.substring(0, 7) === 'free: '){
+                    const message = message.payloadString.replace('free: ', '');
+                    this.setState({serverIsFree: message });
+                }
+
                 if(message.payloadString.substring(0, 21) === 'data:image/gif;base64') {
                   this.setState({
                       img_url: message.payloadString,
@@ -74,7 +89,7 @@ class App extends Component {
       <div className="app">
         <Header />
         <Preview url={this.state.img_url} customImage={this.state.customImage}/>
-        <Controls url={this.state.img_url} onSubmit={(event, controlsFPS, controlsMode, controlsDuration) => this.sendMessage(event, controlsFPS, controlsMode, controlsDuration)}/>
+        <Controls url={this.state.img_url} onSubmit={(event, controlsFPS, controlsMode, controlsDuration) => this.sendMessage(event, controlsFPS, controlsMode, controlsDuration)} className={ this.state.serverIsFree === 'true' ? 'controls--hidden ' : 'controls--visible'}/>
       </div>
     );
   }
