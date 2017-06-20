@@ -62,10 +62,14 @@ client.on('message', function (topic, message) {
 
       if (mode === 'boomerang'){
           reverseMovie(name);
-          combineMovies(name);
+          setTimeout(function() {
+              combineMovies(name);
+          }, 1000);
       } else if (mode === 'reverse') {
           reverseMovie(name);
-          renameReverseMovie(name);
+          setTimeout(function() {
+              renameReverseMovie(name);
+          }, 1000);
       } else {
           renameNormalMovie(name);
       }
