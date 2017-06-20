@@ -30,7 +30,7 @@ client.on('message', function (topic, message) {
       console.log('received gif');
   }
 
-  if (message.slice(0,5) === 'free?') {
+  if (message === 'free?') {
       client.publish('testtopic/gifBoothTest', 'free: ' + serverIsFree);
   }
 
