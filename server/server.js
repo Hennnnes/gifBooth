@@ -62,9 +62,9 @@ client.on('message', function (topic, message) {
                 client.publish('testtopic/gifBoothTest', data);
                 console.log('Published: ' + data.slice(0,21));
             }, 1000);
-        }, 1000);
+        }, 2000);
 
-    }, 500);
+    }, 1000);
   }, duration * 100);
 
 });
@@ -92,7 +92,7 @@ function moveVideo(filename) {
 
 function generateGif(name, duration, fps) {
     // generate gif with custom palette
-     exec('ffmpeg -t ' + duration + ' -i files/' + name + '/movie.mp4 -filter_complex \ "fps=' + fps + ',scale=400:-1" files/' + name + '/output.gif');
+     exec('ffmpeg -t ' + duration + ' -i files/' + name + '/movie.mjpg -filter_complex \ "fps=' + fps + ',scale=400:-1" files/' + name + '/output.gif');
 }
 
 function generateRandomName() {
