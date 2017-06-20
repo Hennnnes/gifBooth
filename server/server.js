@@ -73,6 +73,7 @@ function exposeCamera(duration) {
 
     // expose camera
     exec('gphoto2 --capture-movie='+duration+'s');
+    console.log('gphoto2 --capture-movie='+duration+'s');
 }
 
 function createFolder(filename) {
