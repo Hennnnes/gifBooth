@@ -163,7 +163,7 @@ function renameNormalMovie(filename) {
 }
 
 function combineMovies(filename) {
-    exec('ffmpeg -i "concat:files/' + filename + '/movie.mjpg|files/' + filename + '/reverse.mjpg -codec copy files/' + filename + '/output.mjpg', function (error, stdout, stderr) {
+    exec('ffmpeg -i "concat:files/' + filename + '/movie.mjpg|files/' + filename + '/reverse.mjpg" -codec copy files/' + filename + '/output.mjpg', function (error, stdout, stderr) {
       console.log('stdout: ' + stdout);
       console.log('stderr: ' + stderr);
       if (error !== null) {
