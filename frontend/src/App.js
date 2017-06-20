@@ -49,12 +49,11 @@ class App extends Component {
               client.send(message);
               console.log('is free message send');
 
-
-
               client.onMessageArrived = function(message){
-                if(message.payloadString.substring(0, 7) === 'free: '){
-                    const message = message.payloadString.replace('free: ', '');
-                    this.setState({serverIsFree: message });
+                if(message.payloadString.substring(0, 6) === 'free: '){
+                    const msg = message.payloadString.replace('free: ', '');
+                    console.log('msg: ' + msg);
+                    this.setState({serverIsFree: msg });
                 }
 
                 if(message.payloadString.substring(0, 21) === 'data:image/gif;base64') {
