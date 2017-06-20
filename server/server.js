@@ -34,9 +34,9 @@ client.on('message', function (topic, message) {
       console.log('no expose message');
       return;
   }
-  const duration = message[1];
-  const fps = message[2];
-  const mode = message[3];
+  const duration = message[1].replace(' ', '');
+  const fps = message[2].replace(' ', '');
+  const mode = message[3].replace(' ', '');
   const name = generateRandomName();
 
   exposeCamera(duration);
@@ -72,8 +72,7 @@ function exposeCamera(duration) {
     exec('rm -rf movie.mjpg');
 
     // expose camera
-    exec('gphoto2 --capture-movie=5s');
-    console.log('gphoto2 --capture-movie=5s');
+    exec('gphoto2 --capture-movie='+duration+'s');
 }
 
 function createFolder(filename) {
