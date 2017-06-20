@@ -57,11 +57,10 @@ client.on('message', function (topic, message) {
   setTimeout(function()  {
       data = base64Img.base64Sync('files/' + name + '/output.gif');
       console.log('base generated');
+
+      client.publish('testtopic/gifBoothTest', data);
+      console.log('Published: ' + data.slice(0,21));
   }, duration * 1000);
-
-  client.publish('testtopic/gifBoothTest', data);
-  console.log('Published: ' + data.slice(0,21));
-
 });
 
 
