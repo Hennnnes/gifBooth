@@ -34,7 +34,7 @@ client.on('message', function (topic, message) {
       console.log('no expose message');
       return;
   }
-  const duration = message[1].replace(' ', '');
+  const duration = parseInt(message[1].replace(' ', '')) + 1;
   const fps = message[2].replace(' ', '');
   const mode = message[3].replace(' ', '');
   const name = generateRandomName();
