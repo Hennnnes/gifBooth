@@ -60,6 +60,17 @@ client.on('message', function (topic, message) {
       moveVideo(name);
       console.log('video moved');
 
+      if (mode === 'boomerang'){
+          reverseMovie();
+          combineMovies();
+      } else if (mode === 'reverse') {
+          reverseMovie();
+          renameReverseMovie();
+      } else {
+          renameNormalMovie();
+      }
+
+
       setTimeout(function() {
           generateGif(name, duration, fps);
           console.log('gif generated');
@@ -120,6 +131,48 @@ function moveVideo(filename) {
       }
     });
 }
+
+function reverseMovie(filename) {
+    exec('ffmpeg -i files/' + filename + '/movie.mjpg -vf reverse files/' + filename + '/reverse.mjpg', function (error, stdout, stderr) {
+      console.log('stdout: ' + stdout);
+      console.log('stderr: ' + stderr);
+      if (error !== null) {
+        console.log('exec error: ' + error);
+      }
+    });
+}
+
+function renameReverseMovie(filename) {
+    exec('mv reverse.mjpg output.mjpg', function (error, stdout, stderr) {
+      console.log('stdout: ' + stdout);
+      console.log('stderr: ' + stderr);
+      if (error !== null) {
+        console.log('exec error: ' + error);
+      }
+    });
+}
+
+function renameNormalMovie(filename) {
+    exec('mv movie.mjpg output.mjpg', function (error, stdout, stderr) {
+      console.log('stdout: ' + stdout);
+      console.log('stderr: ' + stderr);
+      if (error !== null) {
+        console.log('exec error: ' + error);
+      }
+    });
+}
+
+function combineMovies(filename) {
+    exec('ffmpeg -i "concat:files/' + filename + '/movie.mjpg|files/' + filename + '/reverse.mjpg -codec copy files/' + filename + '/output.mjpg', function (error, stdout, stderr) {
+      console.log('stdout: ' + stdout);
+      console.log('stderr: ' + stderr);
+      if (error !== null) {
+        console.log('exec error: ' + error);
+      }
+    });
+}
+
+
 
 function generateGif(name, duration, fps) {
     // generate gif with custom palette
