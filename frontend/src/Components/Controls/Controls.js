@@ -1,5 +1,6 @@
 import React from 'react';
 import './Controls.css';
+// import InputRadio from '../InputRadio/InputRadio';
 
 
 class Controls extends React.Component {
@@ -26,6 +27,10 @@ class Controls extends React.Component {
         return (
             <div>
               <form>
+
+                  {/*<InputRadio name={'fps'} values={[5, 10, 20]} value={this.state.fps} handleChange={this.handleChange}/>  */}
+
+
                   <fieldset>
                       <label className={ this.state.fps === '5' ? 'selected ' : ''}>
                         <input type="radio" name="fps" value="5" checked={this.state.fps === '5'} onChange={this.handleChange}/>
@@ -57,6 +62,10 @@ class Controls extends React.Component {
                   </fieldset>
 
                   <fieldset>
+                      <label className={ this.state.mode === 'reverse' ? 'selected ' : ''}>
+                        <input type="radio" name="mode" value="reverse" checked={this.state.mode === 'reverse'} onChange={this.handleChange}/>
+                        Reverse
+                      </label>
                       <label className={ this.state.mode === 'normal' ? 'selected ' : ''}>
                         <input type="radio" name="mode" value="normal" checked={this.state.mode === 'normal'} onChange={this.handleChange}/>
                         Normal
@@ -67,7 +76,7 @@ class Controls extends React.Component {
                       </label>
                   </fieldset>
 
-                  <button className="btn" onClick={(controlsFPS, controlsMode, controlsDuration) => this.props.onSubmit(this.state.fps, this.state.mode, this.state.duration)} />
+                  <button className="btn" onClick={(event, controlsFPS, controlsMode, controlsDuration) => this.props.onSubmit(event, this.state.fps, this.state.mode, this.state.duration)} />
 
               </form>
             </div>

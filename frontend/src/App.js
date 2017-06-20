@@ -5,7 +5,7 @@ import Header from './Components/Header/Header';
 import Preview from './Components/Preview/Preview';
 import Controls from './Components/Controls/Controls';
 
-const client = new window.Messaging.Client(`broker.mqttdashboard.com`, 8000, `myclientid_${parseInt(Math.random() * 100, 10)}`);
+ const client = new window.Messaging.Client(`broker.mqttdashboard.com`, 8000, `myclientid_${parseInt(Math.random() * 100, 10)}`);
 
 class App extends Component {
   constructor() {
@@ -59,7 +59,8 @@ class App extends Component {
       client.connect(options);
   }
 
-  sendMessage(controlsFPS, controlsMode, controlsDuration) {
+  sendMessage(e, controlsFPS, controlsMode, controlsDuration) {
+      e.preventDefault();
       const payload = `expose, ${controlsDuration}, ${controlsFPS}, ${controlsMode}`;
       const message = new window.Messaging.Message(payload);
       message.destinationName = 'testtopic/gifBoothTest';
@@ -73,7 +74,7 @@ class App extends Component {
       <div className="app">
         <Header />
         <Preview url={this.state.img_url} customImage={this.state.customImage}/>
-        <Controls url={this.state.img_url} onSubmit={(controlsFPS, controlsMode, controlsDuration) => this.sendMessage(controlsFPS, controlsMode, controlsDuration)}/>
+        <Controls url={this.state.img_url} onSubmit={(event, controlsFPS, controlsMode, controlsDuration) => this.sendMessage(event, controlsFPS, controlsMode, controlsDuration)}/>
       </div>
     );
   }
