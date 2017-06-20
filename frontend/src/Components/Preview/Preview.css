@@ -3,13 +3,13 @@
     max-height: 300px;
     max-width: 100%;
     margin: 0 auto 20px auto;
-
 }
 
 .download_button {
     display: none;
     padding: 10px 20px;
     margin: 0 auto 20px auto;
+    text-decoration: none;
     background-color: #CF4647;
     color: white;
     border: 0;
@@ -26,5 +26,5 @@
 }
 
 .download_button.active {
-    display: block;
+    display: inline-block;
 }

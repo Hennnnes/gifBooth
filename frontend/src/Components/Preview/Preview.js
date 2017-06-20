@@ -9,7 +9,7 @@ const Preview = (props)  => {
     return(
         <div>
             <img src={props.url} alt="some waiting gif" className="preview_image"/>
-            <button href={props.url} download="test.gif" className={downloadClassName}>download</button>
+            <a href={props.url} download="test.gif" className={downloadClassName}>download</a>
         </div>
     )
 }

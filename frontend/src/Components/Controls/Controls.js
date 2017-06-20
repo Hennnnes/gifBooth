@@ -76,7 +76,7 @@ class Controls extends React.Component {
                       </label>
                   </fieldset>
 
-                  <button className="btn" onClick={(event, controlsFPS, controlsMode, controlsDuration) => this.props.onSubmit(event, this.state.fps, this.state.mode, this.state.duration)} />
+                  <a className="btn" onClick={(event, controlsFPS, controlsMode, controlsDuration) => this.props.onSubmit(event, this.state.fps, this.state.mode, this.state.duration)} />
 
               </form>
             </div>
