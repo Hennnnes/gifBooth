@@ -34,39 +34,34 @@ client.on('message', function (topic, message) {
       console.log('no expose message');
       return;
   }
-  const duration = message[1].parseInt();
-  const fps = message[2].parseInt();
+  const duration = message[1];
+  const fps = message[2];
   const mode = message[3];
   const name = generateRandomName();
-
-  // ensure variables are in range
-  duration = (duration < 1) ? 1 : duration;
-  duration = (duration > 5) ? 5 : duration;
-  fps = (fps < 2) ? 2 : fps;
-  fps = (fps > 8) ? 8 : fps;
-  mode = (mode === 'normal' || mode === 'boomerang') ? mode : 'normal';
 
 
   // actiooooon
   setTimeout(function() {
     exposeCamera(duration);
+    console.log('camera exposed');
 
     setTimeout(function() {
         createFolder(name);
         moveVideo(name);
+        console.log('video moved');
 
         setTimeout(function() {
             generateGif(name, duration, fps);
+            console.log('gif generated');
 
             // wait because it takes it's time
             setTimeout(function() {
-                // var data = base64Img.base64Sync('files/' + name + '/output.gif');
                 var data = base64Img.base64Sync('files/' + name + '/output.gif');
 
                 // publish data to topic
                 client.publish('testtopic/gifBoothTest', data);
                 console.log('Published: ' + data.slice(0,21));
-            }, 500);
+            }, 1000);
         }, 1000);
 
     }, 500);
