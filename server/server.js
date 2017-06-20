@@ -72,8 +72,8 @@ function exposeCamera(duration) {
     exec('rm -rf movie.mjpg');
 
     // expose camera
-    exec('gphoto2 --capture-movie='+duration+'s');
-    console.log('gphoto2 --capture-movie='+duration+'s');
+    exec('gphoto2 --capture-movie=5s');
+    console.log('gphoto2 --capture-movie=5s');
 }
 
 function createFolder(filename) {
