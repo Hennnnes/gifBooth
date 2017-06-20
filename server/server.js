@@ -64,7 +64,7 @@ client.on('message', function (topic, message) {
           reverseMovie(name);
           setTimeout(function() {
               combineMovies(name);
-          }, 1000);
+          }, 4000);
       } else if (mode === 'reverse') {
           reverseMovie(name);
           setTimeout(function() {
