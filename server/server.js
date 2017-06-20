@@ -8,6 +8,8 @@ const base64Img = require('base64-img');
 const sys = require('util')
 const exec = require('child_process').exec;
 
+function puts(error, stdout, stderr) { sys.puts(stdout) }
+
 client.on('connect', function () {
   client.subscribe('testtopic/gifBoothTest');
   console.log('connected to testtopic/gifBoothTest')
@@ -69,23 +71,23 @@ client.on('message', function (topic, message) {
 /* Functions */
 function exposeCamera(duration) {
     // delete movie if there should be one left
-    exec('rm -rf movie.mjpg');
+    exec('rm -rf movie.mjpg', puts);
 
     // expose camera
-    exec('gphoto2 --capture-movie='+duration+'s');
+    exec('gphoto2 --capture-movie='+duration+'s', puts);
 }
 
 function createFolder(filename) {
-    exec('mkdir files/' + filename);
+    exec('mkdir files/' + filename, puts);
 }
 
 function moveVideo(filename) {
-    exec('mv movie.mjpg files/' + filename + '/movie.mjpg');
+    exec('mv movie.mjpg files/' + filename + '/movie.mjpg', puts);
 }
 
 function generateGif(name, duration, fps) {
     // generate gif with custom palette
-     exec('ffmpeg -t ' + duration + ' -i files/' + name + '/movie.mjpg -filter_complex \ "fps=' + fps + ',scale=400:-1" files/' + name + '/output.gif');
+     exec('ffmpeg -t ' + duration + ' -i files/' + name + '/movie.mjpg -filter_complex \ "fps=' + fps + ',scale=400:-1" files/' + name + '/output.gif', puts);
 }
 
 function generateRandomName() {
