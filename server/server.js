@@ -39,21 +39,23 @@ client.on('message', function (topic, message) {
   const mode = message[3];
   const name = generateRandomName();
 
-  exposeCamera(duration);
-  console.log('camera exposed');
+  setTimeout(function() {
+      exposeCamera(duration);
+      console.log('camera exposed');
+  }, 6000);
 
   setTimeout(function() {
       createFolder(name);
       moveVideo(name);
       console.log('video moved');
-  }, duration * 1000);
+  }, 2000);
 
   setTimeout(function() {
       generateGif(name, duration, fps);
       console.log('gif generated');
   }, duration * 2000);
 
-  var date = '';
+  var data = '';
   setTimeout(function()  {
       data = base64Img.base64Sync('files/' + name + '/output.gif');
       console.log('base generated');
