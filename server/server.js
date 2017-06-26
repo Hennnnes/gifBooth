@@ -13,13 +13,13 @@ let serverIsFree = true;
 
 /* MQTT on connect to topic */
 client.on('connect', function () {
-  client.subscribe('testtopic/gifBoothTest');
-  console.log('connected to testtopic/gifBoothTest')
+    client.subscribe('testtopic/gifBoothTest');
+    console.log('connected to testtopic/gifBoothTest')
 });
 
 /* MQTT in disconnected */
 client.on('disconnected', function () {
-  console.log('disconnected')
+    console.log('disconnected');
 });
 
 client.on('message', function (topic, message) {
@@ -35,15 +35,15 @@ client.on('message', function (topic, message) {
       client.publish('testtopic/gifBoothTest', 'free: ' + serverIsFree);
   }
 
-  // split message and get values
-  message = message.split(",");
-
-  if (message[0] != 'expose') {
-      console.log('message makes no sense');
-      return;
-  }
   if (!serverIsFree) {
       console.log('server already in use');
+      return;
+  }
+
+  // split message and get values
+  message = message.split(",");
+  if (message[0] != 'expose') {
+      console.log('message makes no sense');
       return;
   }
 
@@ -58,29 +58,31 @@ client.on('message', function (topic, message) {
   const name = generateRandomName();
 
   // expose camera and log
+  removeOldFile('movie.mjpg');
   exposeCamera(duration);
   console.log('camera exposed');
 
-
   setTimeout(function() {
       createFolder(name);
-      moveVideo(name);
+      moveVideo('movie.mjpg', 'files/'+ name +'/movie.mjpg');
       console.log('video moved');
 
-      if (mode === 'boomerang'){
-          reverseMovie(name);
-          setTimeout(function() {
-              combineMovies(name);
-          }, 4000);
-      } else if (mode === 'reverse') {
-          reverseMovie(name);
-          setTimeout(function() {
-              renameReverseMovie(name);
-          }, 1000);
-      } else {
-          renameNormalMovie(name);
+      switch (mode) {
+          case 'boomerang':
+              reverseMovie(name);
+              setTimeout(function() {
+                  combineMovies(name);
+              }, 4000);
+              break;
+          case 'reverse':
+              reverseMovie(name);
+              setTimeout(function() {
+                  renameFile('reverse.mjpg', 'output.mjpg');
+              }, 1000);
+              break;
+          default:
+              renameFile('movie.mjpg', 'output.mjpg');
       }
-
 
       setTimeout(function() {
           generateGif(name, duration, fps);
@@ -115,11 +117,11 @@ function logExec(log, error, stdout, stderr) {
     }
 }
 
-function exposeCamera(duration) {
-    // delete movie if there should be one left
-    exec('rm -rf movie.mjpg', logExec(showLogs, error, stdout, stderr));
+function removeOldFile(filename) {
+    exec('rm -rf ' + filename, logExec(showLogs, error, stdout, stderr));
+}
 
-    // expose camera
+function exposeCamera(duration) {
     exec('gphoto2 --capture-movie='+duration+'s', logExec(showLogs, error, stdout, stderr));
 }
 
@@ -127,20 +129,21 @@ function createFolder(filename) {
     exec('mkdir files/' + filename, logExec(showLogs, error, stdout, stderr));
 }
 
-function moveVideo(filename) {
-    exec('mv movie.mjpg files/' + filename + '/movie.mjpg', logExec(showLogs, error, stdout, stderr));
+function moveVideo(oldFile, newFile) {
+    exec('mv 'oldFile + ' ' + newFile, logExec(showLogs, error, stdout, stderr));
 }
 
 function reverseMovie(filename) {
     exec('ffmpeg -i files/' + filename + '/movie.mjpg -vf reverse files/' + filename + '/reverse.mjpg', logExec(showLogs, error, stdout, stderr));
 }
 
-function renameReverseMovie(filename) {
-    exec('mv reverse.mjpg output.mjpg', logExec(showLogs, error, stdout, stderr));
+
+function renameFile(oldfilename, newfilename) {
+    exec('mv '+ oldfilename + ' ' + newfilename, logExec(showLogs, error, stdout, stderr));
 }
 
 function renameNormalMovie(filename) {
-    exec('mv movie.mjpg output.mjpg', logExec(showLogs, error, stdout, stderr));
+    exec('mv ', logExec(showLogs, error, stdout, stderr));
 }
 
 function combineMovies(filename) {
