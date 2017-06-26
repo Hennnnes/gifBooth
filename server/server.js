@@ -7,20 +7,21 @@ const base64Img = require('base64-img');
 // to run command line
 const sys = require('util')
 const exec = require('child_process').exec;
-
+const showLogs = true;
 let serverIsFree = true;
 
+
+/* MQTT on connect to topic */
 client.on('connect', function () {
   client.subscribe('testtopic/gifBoothTest');
   console.log('connected to testtopic/gifBoothTest')
-})
+});
 
+/* MQTT in disconnected */
 client.on('disconnected', function () {
   console.log('disconnected')
-})
+});
 
-
-/* message format: ['expose', duration, fps, mode] */
 client.on('message', function (topic, message) {
   // message is Buffer
   message = message.toString();
@@ -102,97 +103,53 @@ client.on('message', function (topic, message) {
 
 
 /* Functions */
+function logExec(log, error, stdout, stderr) {
+    if (!log) {
+        return;
+    }
+
+    console.log('stdout: ' + stdout);
+    console.log('stderr: ' + stderr);
+    if (error !== null) {
+      console.log('exec error: ' + error);
+    }
+}
+
 function exposeCamera(duration) {
     // delete movie if there should be one left
-    exec('rm -rf movie.mjpg', function (error, stdout, stderr) {
-      console.log('stdout: ' + stdout);
-      console.log('stderr: ' + stderr);
-      if (error !== null) {
-        console.log('exec error: ' + error);
-      }
-    });
+    exec('rm -rf movie.mjpg', logExec(showLogs, error, stdout, stderr));
 
     // expose camera
-    exec('gphoto2 --capture-movie='+duration+'s', function (error, stdout, stderr) {
-      console.log('stdout: ' + stdout);
-      console.log('stderr: ' + stderr);
-      if (error !== null) {
-        console.log('exec error: ' + error);
-      }
-    });
+    exec('gphoto2 --capture-movie='+duration+'s', logExec(showLogs, error, stdout, stderr));
 }
 
 function createFolder(filename) {
-    exec('mkdir files/' + filename, function (error, stdout, stderr) {
-      console.log('stdout: ' + stdout);
-      console.log('stderr: ' + stderr);
-      if (error !== null) {
-        console.log('exec error: ' + error);
-      }
-    });
+    exec('mkdir files/' + filename, logExec(showLogs, error, stdout, stderr));
 }
 
 function moveVideo(filename) {
-    exec('mv movie.mjpg files/' + filename + '/movie.mjpg', function (error, stdout, stderr) {
-      console.log('stdout: ' + stdout);
-      console.log('stderr: ' + stderr);
-      if (error !== null) {
-        console.log('exec error: ' + error);
-      }
-    });
+    exec('mv movie.mjpg files/' + filename + '/movie.mjpg', logExec(showLogs, error, stdout, stderr));
 }
 
 function reverseMovie(filename) {
-    exec('ffmpeg -i files/' + filename + '/movie.mjpg -vf reverse files/' + filename + '/reverse.mjpg', function (error, stdout, stderr) {
-      console.log('stdout: ' + stdout);
-      console.log('stderr: ' + stderr);
-      if (error !== null) {
-        console.log('exec error: ' + error);
-      }
-    });
+    exec('ffmpeg -i files/' + filename + '/movie.mjpg -vf reverse files/' + filename + '/reverse.mjpg', logExec(showLogs, error, stdout, stderr));
 }
 
 function renameReverseMovie(filename) {
-    exec('mv reverse.mjpg output.mjpg', function (error, stdout, stderr) {
-      console.log('stdout: ' + stdout);
-      console.log('stderr: ' + stderr);
-      if (error !== null) {
-        console.log('exec error: ' + error);
-      }
-    });
+    exec('mv reverse.mjpg output.mjpg', logExec(showLogs, error, stdout, stderr));
 }
 
 function renameNormalMovie(filename) {
-    exec('mv movie.mjpg output.mjpg', function (error, stdout, stderr) {
-      console.log('stdout: ' + stdout);
-      console.log('stderr: ' + stderr);
-      if (error !== null) {
-        console.log('exec error: ' + error);
-      }
-    });
+    exec('mv movie.mjpg output.mjpg', logExec(showLogs, error, stdout, stderr));
 }
 
 function combineMovies(filename) {
-    exec('ffmpeg -i "concat:files/' + filename + '/movie.mjpg|files/' + filename + '/reverse.mjpg" -codec copy files/' + filename + '/output.mjpg', function (error, stdout, stderr) {
-      console.log('stdout: ' + stdout);
-      console.log('stderr: ' + stderr);
-      if (error !== null) {
-        console.log('exec error: ' + error);
-      }
-    });
+    exec('ffmpeg -i "concat:files/' + filename + '/movie.mjpg|files/' + filename + '/reverse.mjpg" -codec copy files/' + filename + '/output.mjpg', logExec(showLogs, error, stdout, stderr));
 }
-
-
 
 function generateGif(name, duration, fps) {
     // generate gif with custom palette
-     exec('ffmpeg -t ' + duration + ' -i files/' + name + '/movie.mjpg -filter_complex \ "fps=' + fps + ',scale=400:-1" files/' + name + '/output.gif', function (error, stdout, stderr) {
-      console.log('stdout: ' + stdout);
-      console.log('stderr: ' + stderr);
-      if (error !== null) {
-        console.log('exec error: ' + error);
-      }
-    });
+     exec('ffmpeg -t ' + duration + ' -i files/' + name + '/movie.mjpg -filter_complex \ "fps=' + fps + ',scale=400:-1" files/' + name + '/output.gif', logExec(showLogs, error, stdout, stderr));
 }
 
 function generateRandomName() {
