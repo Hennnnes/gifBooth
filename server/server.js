@@ -38,7 +38,7 @@ client.on('message', function (topic, message) {
   message = message.split(",");
 
   if (message[0] != 'expose') {
-      console.log('no expose message');
+      console.log('message makes no sense');
       return;
   }
   if (!serverIsFree) {
@@ -46,14 +46,20 @@ client.on('message', function (topic, message) {
       return;
   }
 
+  // Server begins process now
   serverIsFree = false;
+  client.publish('testtopic/gifBoothTest', 'status: process started');
+
+  // get parameters from message
   const duration = parseInt(message[1].replace(' ', '')) + 1;
   const fps = message[2].replace(' ', '');
   const mode = message[3].replace(' ', '');
   const name = generateRandomName();
 
+  // expose camera and log
   exposeCamera(duration);
   console.log('camera exposed');
+
 
   setTimeout(function() {
       createFolder(name);
@@ -81,7 +87,7 @@ client.on('message', function (topic, message) {
 
           setTimeout(function() {
               var data = base64Img.base64Sync('files/' + name + '/output.gif');
-              console.log('base generated');
+              console.log('base64 generated');
 
               setTimeout(function() {
                   client.publish('testtopic/gifBoothTest', data);

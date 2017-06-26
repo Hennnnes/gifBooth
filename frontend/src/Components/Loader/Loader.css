@@ -1,0 +1,30 @@
+.loader {
+    font-size: 50px;
+    font-weight: bold;
+    background-color: #0175cd;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    text-align: center;
+    animation: opacity 4s infinite;
+}
+
+.loader.hidden {
+    display: none;
+}
+
+@keyframes opacity {
+    20% {
+        opacity: 0.4;
+    }
+    50% {
+        opacity: 0.6;
+    }
+    70% {
+        opacity: 0.4;
+    }
+    100% {
+        opacity: 1;
+    }
+}
