@@ -2,7 +2,6 @@ import React from 'react';
 import './Controls.css';
 // import InputRadio from '../InputRadio/InputRadio';
 
-
 class Controls extends React.Component {
     constructor(props) {
         super();
@@ -11,7 +10,8 @@ class Controls extends React.Component {
             fps: '5',
             duration: '2',
             mode: 'normal',
-            filter: 'filterNormal'
+            filter: 'filterNormal',
+            fpsOptionsVisible: false
         }
         this.handleChange = this.handleChange.bind(this);
     }
@@ -24,28 +24,39 @@ class Controls extends React.Component {
       this.setState({ [name]: value });
     }
 
+    handleClick(e, options){
+      this.setState({
+        [e.target.name]: !options
+      });
+    }
+
     render() {
         return (
             <div>
+              <div className="control-bar">
+                <button name="fpsOptionsVisible" onClick={(e, options) => this.handleClick(e, this.state.fpsOptionsVisible)}>FPS</button>
+              </div>
               <form>
 
                 {/*<InputRadio name={'fps'} values={[5, 10, 20]} value={this.state.fps} handleChange={this.handleChange}/>  */}
 
 
-                <fieldset>
-                  <label className={ this.state.fps === '5' ? 'selected ' : ''}>
-                    <input type="radio" name="fps" value="5" checked={this.state.fps === '5'} onChange={this.handleChange}/>
-                    5ps
-                  </label>
-                  <label className={ this.state.fps === '10' ? 'selected ' : ''}>
-                    <input type="radio" name="fps" value="10" checked={this.state.fps === '10'} onChange={this.handleChange}/>
-                    10fps
-                  </label>
-                  <label className={ this.state.fps === '20' ? 'selected ' : ''}>
-                    <input type="radio" name="fps" value="20" checked={this.state.fps === '20'} onChange={this.handleChange}/>
-                    20fps
-                  </label>
-                </fieldset>
+                {this.state.fpsOptionsVisible &&
+                  <fieldset>
+                    <label className={ this.state.fps === '5' ? 'selected ' : ''}>
+                      <input type="radio" name="fps" value="5" checked={this.state.fps === '5'} onChange={this.handleChange}/>
+                      5fps
+                    </label>
+                    <label className={ this.state.fps === '10' ? 'selected ' : ''}>
+                      <input type="radio" name="fps" value="10" checked={this.state.fps === '10'} onChange={this.handleChange}/>
+                      10fps
+                    </label>
+                    <label className={ this.state.fps === '20' ? 'selected ' : ''}>
+                      <input type="radio" name="fps" value="20" checked={this.state.fps === '20'} onChange={this.handleChange}/>
+                      20fps
+                    </label>
+                  </fieldset>
+                  }
 
                 <fieldset>
                   <label className={ this.state.duration === '1' ? 'selected ' : ''}>

@@ -62,3 +62,8 @@ fieldset label.selected {
 fieldset input[type="radio"] {
     display: none;
 }
+
+/*Styles for Control Bar*/
+.control-bar{
+  
+}
