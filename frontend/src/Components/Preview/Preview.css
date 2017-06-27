@@ -1,3 +1,7 @@
+.preview_wrapper{
+  text-align: center;
+}
+
 .preview_image {
     display: block;
     max-height: 300px;
