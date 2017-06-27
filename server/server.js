@@ -94,8 +94,7 @@ client.on('message', function (topic, message) {
           setTimeout(function() {
               var data = base64Img.base64Sync('files/' + name + '/output.gif');
               console.log('base64 generated');
-              client.publish('testtopic/gifBoothTest', 'status: process finished');
-
+              
               setTimeout(function() {
                   client.publish('testtopic/gifBoothTest', data);
                   console.log('Published: ' + data.slice(0,21));

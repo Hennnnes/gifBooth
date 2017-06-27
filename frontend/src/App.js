@@ -58,14 +58,16 @@ class App extends Component {
 
                 if (message.payloadString.substring(0, 8) === 'status: ') {
                     let msg = message.payloadString.replace('status: ', '');
+                    console.log(msg);
                     msg = (msg === 'process started') ? true : false;
-                    this.setState({ 'appState': msg});
+                    this.setState({ 'serverProcessing': msg});
                 }
 
                 if (message.payloadString.substring(0, 21) === 'data:image/gif;base64') {
                   this.setState({
                       img_url: message.payloadString,
-                      customImage: true
+                      customImage: true,
+                      serverProcessing: false
                   });
                 }
               }.bind(this);
