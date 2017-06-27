@@ -3,3 +3,5 @@ node_modules/
 *.gif
 *.mjpg
 npm-debug.log
+server/files/*
+!server/files/.gitkeep
