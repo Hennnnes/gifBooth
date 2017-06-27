@@ -79,13 +79,14 @@ class Controls extends React.Component {
 
                 <fieldset>
                   <label className={ this.state.filter === 'filterNormal' ? 'selected ' : ''}>
-                    <input type="radio" name="filter" value="filterNormal" checked={this.state.mode === 'normal'} onChange={this.handleChange}/>
+                    <input type="radio" name="filter" value="filterNormal" checked={this.state.filter === 'filterNormal'} onChange={this.handleChange}/>
                     No Filter
                   </label>
                   <label className={ this.state.filter === 'filterGrey' ? 'selected ' : ''}>
-                    <input type="radio" name="filter" value="filterGrey" checked={this.state.mode === 'grey'} onChange={this.handleChange}/>
+                    <input type="radio" name="filter" value="filterGrey" checked={this.state.filter === 'filterGrey'} onChange={this.handleChange}/>
                     Grey
                   </label>
+                  
                 </fieldset>
 
                 <a className="btn" onClick={(event, controlsFPS, controlsMode, controlsDuration, controlsFilter) => this.props.onSubmit(event, this.state.fps, this.state.mode, this.state.duration, this.state.filter)} />

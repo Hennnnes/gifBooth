@@ -57,6 +57,7 @@ client.on('message', function (topic, message) {
   const duration = parseInt(message[1].replace(' ', '')) + 1;
   const fps = message[2].replace(' ', '');
   const mode = message[3].replace(' ', '');
+  const filter = message[4].replace(' ', '');
   const name = generateRandomName();
 
   // expose camera and log
@@ -91,8 +92,18 @@ client.on('message', function (topic, message) {
           generateGif(name, duration, fps);
           console.log('gif generated');
 
+          setTimeout(function(){
+            if(filter === 'filterGrey'){
+              console.log('filter:', filter);
+              exec('ffmpeg -i files/' + name + '/output.gif -vf colorchannelmixer=.3:.4:.3:0:.3:.4:.3:0:.3:.4:.3 files/' + name + '/outputGrey.gif');
+            }
+
           setTimeout(function() {
-              var data = base64Img.base64Sync('files/' + name + '/output.gif');
+              if(filter === 'filterGrey'){
+                var data = base64Img.base64Sync('files/' + name + '/outputGrey.gif');
+              } else {
+                var data = base64Img.base64Sync('files/' + name + '/output.gif');
+              }
               console.log('base64 generated');
 
               setTimeout(function() {
@@ -101,6 +112,7 @@ client.on('message', function (topic, message) {
                   serverIsFree = true;
               }, 2000);
           }, 4000);
+        }, 4000);
       }, 4000);
   }, 6000);
 
