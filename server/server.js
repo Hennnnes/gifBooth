@@ -75,7 +75,7 @@ client.on('message', function (topic, message) {
               reverseMovie(name);
               setTimeout(function() {
                   combineMovies(name);
-              }, 4000);
+              }, 1000);
               break;
           case 'reverse':
               reverseMovie(name);
@@ -102,7 +102,7 @@ client.on('message', function (topic, message) {
                   serverIsFree = true;
               }, 2000);
           }, 4000);
-      }, 1000);
+      }, 2000);
   }, 6000);
 
 });
