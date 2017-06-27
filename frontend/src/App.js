@@ -81,9 +81,9 @@ class App extends Component {
       client.connect(options);
   }
 
-  sendMessage(e, controlsFPS, controlsMode, controlsDuration) {
+  sendMessage(e, controlsFPS, controlsMode, controlsDuration, controlsFilter) {
       e.preventDefault();
-      const payload = `expose, ${controlsDuration}, ${controlsFPS}, ${controlsMode}`;
+      const payload = `expose, ${controlsDuration}, ${controlsFPS}, ${controlsMode}, ${controlsFilter}`;
       const message = new window.Messaging.Message(payload);
       message.destinationName = 'testtopic/gifBoothTest';
       message.qos = 2;
@@ -96,7 +96,7 @@ class App extends Component {
       <div className="app">
         <Header />
         <Preview url={this.state.img_url} customImage={this.state.customImage} visible={this.state.serverProcessing}/>
-        <Controls url={this.state.img_url} onSubmit={(event, controlsFPS, controlsMode, controlsDuration) => this.sendMessage(event, controlsFPS, controlsMode, controlsDuration)} className={ this.state.serverIsFree === 'true' ? 'controls--hidden ' : 'controls--visible'}/>
+        <Controls url={this.state.img_url} onSubmit={(event, controlsFPS, controlsMode, controlsDuration, controlsFilter) => this.sendMessage(event, controlsFPS, controlsMode, controlsDuration, controlsFilter)} className={ this.state.serverIsFree === 'true' ? 'controls--hidden ' : 'controls--visible'}/>
       </div>
     );
   }
