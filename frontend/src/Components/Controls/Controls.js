@@ -2,6 +2,8 @@ import React from 'react';
 import './Controls.css';
 // import InputRadio from '../InputRadio/InputRadio';
 
+let lastOptionsVisible;
+
 class Controls extends React.Component {
     constructor(props) {
         super();
@@ -29,8 +31,10 @@ class Controls extends React.Component {
 
     handleClick(e, options){
       this.setState({
+        [lastOptionsVisible]: false,
         [e.target.name]: !options
       });
+      lastOptionsVisible = e.target.name;
     }
 
     render() {
