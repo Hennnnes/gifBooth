@@ -75,13 +75,13 @@ client.on('message', function (topic, message) {
               reverseMovie(name);
               setTimeout(function() {
                   combineMovies(name);
-              }, 1000);
+              }, 2000);
               break;
           case 'reverse':
               reverseMovie(name);
               setTimeout(function() {
                   renameFile('files/' + name + '/reverse.mjpg', 'files/' + name +'/output.mjpg');
-              }, 1000);
+              }, 2000);
               break;
           default:
               renameFile('files/' + name + '/movie.mjpg', 'files/' + name +'/output.mjpg');
@@ -94,14 +94,14 @@ client.on('message', function (topic, message) {
           setTimeout(function() {
               var data = base64Img.base64Sync('files/' + name + '/output.gif');
               console.log('base64 generated');
-              
+
               setTimeout(function() {
                   client.publish('testtopic/gifBoothTest', data);
                   console.log('Published: ' + data.slice(0,21));
                   serverIsFree = true;
               }, 2000);
           }, 4000);
-      }, 2000);
+      }, 4000);
   }, 6000);
 
 });

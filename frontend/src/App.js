@@ -95,8 +95,7 @@ class App extends Component {
     return (
       <div className="app">
         <Header />
-        <Loader visible={this.state.serverProcessing} />
-        <Preview url={this.state.img_url} customImage={this.state.customImage}/>
+        <Preview url={this.state.img_url} customImage={this.state.customImage} visible={this.state.serverProcessing}/>
         <Controls url={this.state.img_url} onSubmit={(event, controlsFPS, controlsMode, controlsDuration) => this.sendMessage(event, controlsFPS, controlsMode, controlsDuration)} className={ this.state.serverIsFree === 'true' ? 'controls--hidden ' : 'controls--visible'}/>
       </div>
     );

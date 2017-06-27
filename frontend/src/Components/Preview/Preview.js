@@ -1,6 +1,7 @@
 import React from 'react';
 
 import './Preview.css';
+import Loader from '../Loader/Loader.js';
 
 
 const Preview = (props)  => {
@@ -8,8 +9,9 @@ const Preview = (props)  => {
 
     return(
         <div>
-            <img src={props.url} alt="some waiting gif" className="preview_image"/>
-            <a href={props.url} download="test.gif" className={downloadClassName}>download</a>
+          {props.visible ? <Loader /> :  <img src={props.url} alt="some waiting gif" className="preview_image"/>}
+          {/* <img src={props.url} alt="some waiting gif" className="preview_image"/> */}
+          <a href={props.url} download="test.gif" className={downloadClassName}>download</a>
         </div>
     )
 }
