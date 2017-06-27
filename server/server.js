@@ -35,12 +35,13 @@ client.on('message', function (topic, message) {
       client.publish('testtopic/gifBoothTest', 'free: ' + serverIsFree);
   }
 
-  if (!serverIsFree) {
-      console.log('server already in use');
-      return;
-  }
+  // if (!serverIsFree) {
+  //     console.log('server already in use');
+  //     return;
+  // }
 
   // split message and get values
+  console.log(message);
   message = message.split(",");
   if (message[0] != 'expose') {
       console.log('message makes no sense');
@@ -50,6 +51,7 @@ client.on('message', function (topic, message) {
   // Server begins process now
   serverIsFree = false;
   client.publish('testtopic/gifBoothTest', 'status: process started');
+  console.log('test');
 
   // get parameters from message
   const duration = parseInt(message[1].replace(' ', '')) + 1;
@@ -58,12 +60,13 @@ client.on('message', function (topic, message) {
   const name = generateRandomName();
 
   // expose camera and log
-  removeOldFile('movie.mjpg');
-  exposeCamera(duration);
+  // removeOldFile('movie.mjpg');
+  // exposeCamera(duration);
   console.log('camera exposed');
 
   setTimeout(function() {
       createFolder(name);
+      console.log('foler created');
       moveVideo('movie.mjpg', 'files/'+ name +'/movie.mjpg');
       console.log('video moved');
 
@@ -77,11 +80,11 @@ client.on('message', function (topic, message) {
           case 'reverse':
               reverseMovie(name);
               setTimeout(function() {
-                  renameFile('reverse.mjpg', 'output.mjpg');
+                  renameFile('files/' + name + '/reverse.mjpg', 'files/' + name +'/output.mjpg');
               }, 1000);
               break;
           default:
-              renameFile('movie.mjpg', 'output.mjpg');
+              renameFile('files/' + name + '/movie.mjpg', 'files/' + name +'/output.mjpg');
       }
 
       setTimeout(function() {
@@ -91,6 +94,7 @@ client.on('message', function (topic, message) {
           setTimeout(function() {
               var data = base64Img.base64Sync('files/' + name + '/output.gif');
               console.log('base64 generated');
+              client.publish('testtopic/gifBoothTest', 'status: process finished');
 
               setTimeout(function() {
                   client.publish('testtopic/gifBoothTest', data);
@@ -105,54 +109,42 @@ client.on('message', function (topic, message) {
 
 
 /* Functions */
-function logExec(log, error, stdout, stderr) {
-    if (!log) {
-        return;
-    }
-
-    console.log('stdout: ' + stdout);
-    console.log('stderr: ' + stderr);
-    if (error !== null) {
-      console.log('exec error: ' + error);
-    }
+function logExec(log) {
+    console.log('process');
 }
 
 function removeOldFile(filename) {
-    exec('rm -rf ' + filename, logExec(showLogs, error, stdout, stderr));
+    exec('rm -rf ' + filename, logExec(showLogs));
 }
 
 function exposeCamera(duration) {
-    exec('gphoto2 --capture-movie='+duration+'s', logExec(showLogs, error, stdout, stderr));
+    exec('gphoto2 --capture-movie='+duration+'s', logExec(showLogs));
 }
 
 function createFolder(filename) {
-    exec('mkdir files/' + filename, logExec(showLogs, error, stdout, stderr));
+    exec('mkdir files/' + filename, logExec(showLogs));
 }
 
 function moveVideo(oldFile, newFile) {
-    exec('mv 'oldFile + ' ' + newFile, logExec(showLogs, error, stdout, stderr));
+    exec('mv ' + oldFile + ' ' + newFile, logExec(showLogs));
 }
 
 function reverseMovie(filename) {
-    exec('ffmpeg -i files/' + filename + '/movie.mjpg -vf reverse files/' + filename + '/reverse.mjpg', logExec(showLogs, error, stdout, stderr));
+    exec('ffmpeg -i files/' + filename + '/movie.mjpg -vf reverse files/' + filename + '/reverse.mjpg', logExec(showLogs));
 }
 
 
 function renameFile(oldfilename, newfilename) {
-    exec('mv '+ oldfilename + ' ' + newfilename, logExec(showLogs, error, stdout, stderr));
-}
-
-function renameNormalMovie(filename) {
-    exec('mv ', logExec(showLogs, error, stdout, stderr));
+    exec('mv '+ oldfilename + ' ' + newfilename, logExec(showLogs));
 }
 
 function combineMovies(filename) {
-    exec('ffmpeg -i "concat:files/' + filename + '/movie.mjpg|files/' + filename + '/reverse.mjpg" -codec copy files/' + filename + '/output.mjpg', logExec(showLogs, error, stdout, stderr));
+    exec('ffmpeg -i "concat:files/' + filename + '/movie.mjpg|files/' + filename + '/reverse.mjpg" -codec copy files/' + filename + '/output.mjpg', logExec(showLogs));
 }
 
 function generateGif(name, duration, fps) {
     // generate gif with custom palette
-     exec('ffmpeg -t ' + duration + ' -i files/' + name + '/movie.mjpg -filter_complex \ "fps=' + fps + ',scale=400:-1" files/' + name + '/output.gif', logExec(showLogs, error, stdout, stderr));
+     exec('ffmpeg -i files/' + name + '/output.mjpg -filter_complex \ "fps=' + fps + ',scale=400:-1" files/' + name + '/output.gif', logExec(showLogs));
 }
 
 function generateRandomName() {
