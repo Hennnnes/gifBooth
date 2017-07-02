@@ -92,17 +92,17 @@ client.on('message', function (topic, message) {
           generateGif(name, duration, fps);
           console.log('gif generated');
 
-          setTimeout(function(){
-            if(filter === 'filterGrey'){
+          setTimeout(function() {
+            if(filter === 'filterGrey') {
               console.log('filter:', filter);
               exec('ffmpeg -i files/' + name + '/output.gif -vf colorchannelmixer=.3:.4:.3:0:.3:.4:.3:0:.3:.4:.3 files/' + name + '/outputFilter.gif');
-            }else if(filter === 'filterBlue'){
+            } else if(filter === 'filterBlue') {
               console.log('filter:', filter);
               exec('ffmpeg -i files/' + name + '/output.gif -vf colorchannelmixer=1.5:.0:.0:0:-.3:-.4:-.3:0:.0:.0:1.5 files/' + name + '/outputFilter.gif');
-            }
+          }
 
           setTimeout(function() {
-              if(filter != 'filterNormal' ){
+              if(filter != 'filterNormal' ) {
                 var data = base64Img.base64Sync('files/' + name + '/outputFilter.gif');
               } else {
                 var data = base64Img.base64Sync('files/' + name + '/output.gif');

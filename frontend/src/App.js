@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import './App.css';
 
 import Header from './Components/Header/Header';
-import Loader from './Components/Loader/Loader';
 import Preview from './Components/Preview/Preview';
 import Controls from './Components/Controls/Controls';
 

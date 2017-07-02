@@ -1,18 +1,17 @@
-.preview_wrapper{
-  text-align: center;
+.preview_wrapper {
+    text-align: center;
 }
 
 .preview_image {
     display: block;
-    max-height: 300px;
     max-width: 100%;
     margin: 0 auto 20px auto;
 }
 
 .download_button {
-    display: none;
+    display: inline-block;
     padding: 10px 20px;
-    margin: 0 auto 20px auto;
+    margin: 0 auto 15px auto;
     text-decoration: none;
     background-color: #CF4647;
     color: white;
@@ -25,8 +24,8 @@
 .download_button:active,
 .download_button:hover,
 .download_button:focus {
-    transform: translateY(2px);
     border-bottom-color: white;
+    outline: none;
 }
 
 .download_button.active {

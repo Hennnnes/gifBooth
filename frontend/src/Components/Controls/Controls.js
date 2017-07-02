@@ -39,7 +39,7 @@ class Controls extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className="controls">
               <div className="control-bar">
                 <button name="fpsOptionsVisible" onClick={(e, options) => this.handleClick(e, this.state.fpsOptionsVisible)}>FPS</button>
                 <button name="durationOptionsVisible" onClick={(e, options) => this.handleClick(e, this.state.durationOptionsVisible)}>Duration</button>
@@ -119,9 +119,8 @@ class Controls extends React.Component {
                   </fieldset>
                 }
 
-                <a className="btn" onClick={(event, controlsFPS, controlsMode, controlsDuration, controlsFilter) => this.props.onSubmit(event, this.state.fps, this.state.mode, this.state.duration, this.state.filter)} />
-
               </form>
+              <a className="btn__submit" onClick={(event, controlsFPS, controlsMode, controlsDuration, controlsFilter) => this.props.onSubmit(event, this.state.fps, this.state.mode, this.state.duration, this.state.filter)} />
             </div>
         );
     }
