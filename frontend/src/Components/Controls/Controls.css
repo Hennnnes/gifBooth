@@ -1,3 +1,17 @@
+/* reset buttons */
+button,
+button:active,
+button:hover,
+button:focus,
+.btn {
+    box-sizing: border-box;
+    background: none;
+    border: 0;
+    box-shadow: none;
+    outline: none;
+    cursor: pointer;
+}
+
 .btn__submit {
     display: block;
     width: 50px;
@@ -11,40 +25,29 @@
     margin: 0 auto;
 }
 
-.btn:active, .btn:hover, .btn:focus {
-    cursor: pointer;
-}
-
-#image {
-    width: 100%;
-}
-
-form {
-    text-align: center;
-}
-
-
 /* reset fieldset */
-
 fieldset {
     border: 0;
     padding: 0;
     margin: 0;
     min-width: 0;
     text-align: center;
-    width: 100%;
 }
 
+
+/* value labels */
 fieldset label {
+    display: inline-block;
     color: #888;
     padding: 5px 10px;
     border: 2px solid #888;
-    display: inline-block;
     margin: 0 10px 10px 0;
     cursor: pointer;
 }
 
-fieldset label:hover, fieldset label:active, fieldset label:focus {
+fieldset label:hover,
+fieldset label:active,
+fieldset label:focus {
     border-color: black;
     color: black;
 }
@@ -73,26 +76,13 @@ fieldset input[type="radio"] {
 
 .controls form {
     position: absolute;
-    top: 50px;;
+    top: 50px;
     left: 0;
     right: 0;
     margin-top: -50px;
 }
 
-/* reset buttons */
-button,
-button:active,
-button:hover,
-button:focus {
-    box-sizing: border-box;
-    background: none;
-    border: 0;
-    box-shadow: none;
-    outline: none;
-    cursor: pointer;
-}
-
-/* style actual buttons */
+/* style buttons, reset above */
 button {
     padding: 10px;
     color: white;
