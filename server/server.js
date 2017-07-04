@@ -54,11 +54,18 @@ client.on('message', function (topic, message) {
   console.log('test');
 
   // get parameters from message
-  const duration = parseInt(message[1].replace(' ', '')) + 1;
-  const fps = message[2].replace(' ', '');
+  let duration = parseInt(message[1].replace(' ', ''));
+  console.log(duration);
+  duration = duration + 1;
+  console.log(duration);
+  let fps = parseInt(message[2].replace(' ', ''));
   const mode = message[3].replace(' ', '');
   const filter = message[4].replace(' ', '');
   const name = generateRandomName();
+
+  console.log(fps);
+  fps = fps + 5; 
+  console.log(fps);
 
   // expose camera and log
   removeOldFile('movie.mjpg');
@@ -67,7 +74,7 @@ client.on('message', function (topic, message) {
 
   setTimeout(function() {
       createFolder(name);
-      console.log('fold	er created');
+      console.log('folder created');
       moveVideo('movie.mjpg', 'files/'+ name +'/movie.mjpg');
       console.log('video moved');
 
@@ -158,7 +165,7 @@ function combineMovies(filename) {
 
 function generateGif(name, fps) {
     // generate gif with custom palette
-     exec('ffmpeg -i files/' + name + '/output.mjpg -filter_complex \ "fps=' + fps + ',scale=400:-1" files/' + name + '/output.gif', logExec(showLogs));
+     exec('ffmpeg -i files/' + name + '/output.mjpg -filter_complex \ "fps=' + fps + ',scale=400:-1" -framerate ' + fps/2 + ' files/' + name + '/output.gif', logExec(showLogs));
 }
 
 function generateRandomName() {
