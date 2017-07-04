@@ -61,13 +61,13 @@ client.on('message', function (topic, message) {
   const name = generateRandomName();
 
   // expose camera and log
-  // removeOldFile('movie.mjpg');
-  // exposeCamera(duration);
+  removeOldFile('movie.mjpg');
+  exposeCamera(duration);
   console.log('camera exposed');
 
   setTimeout(function() {
       createFolder(name);
-      console.log('foler created');
+      console.log('fold	er created');
       moveVideo('movie.mjpg', 'files/'+ name +'/movie.mjpg');
       console.log('video moved');
 
@@ -76,20 +76,20 @@ client.on('message', function (topic, message) {
               reverseMovie(name);
               setTimeout(function() {
                   combineMovies(name);
-              }, 2000);
+              }, 6000);
               break;
           case 'reverse':
               reverseMovie(name);
               setTimeout(function() {
                   renameFile('files/' + name + '/reverse.mjpg', 'files/' + name +'/output.mjpg');
-              }, 2000);
+              }, 4000);
               break;
           default:
               renameFile('files/' + name + '/movie.mjpg', 'files/' + name +'/output.mjpg');
       }
 
       setTimeout(function() {
-          generateGif(name, duration, fps);
+          generateGif(name, fps);
           console.log('gif generated');
 
           setTimeout(function() {
@@ -116,7 +116,7 @@ client.on('message', function (topic, message) {
               }, 2000);
           }, 4000);
         }, 4000);
-      }, 4000);
+      }, 10000);
   }, 6000);
 
 });
@@ -156,7 +156,7 @@ function combineMovies(filename) {
     exec('ffmpeg -i "concat:files/' + filename + '/movie.mjpg|files/' + filename + '/reverse.mjpg" -codec copy files/' + filename + '/output.mjpg', logExec(showLogs));
 }
 
-function generateGif(name, duration, fps) {
+function generateGif(name, fps) {
     // generate gif with custom palette
      exec('ffmpeg -i files/' + name + '/output.mjpg -filter_complex \ "fps=' + fps + ',scale=400:-1" files/' + name + '/output.gif', logExec(showLogs));
 }
