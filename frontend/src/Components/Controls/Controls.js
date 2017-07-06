@@ -89,15 +89,15 @@ class Controls extends React.Component {
                   <fieldset>
                     <label className={ this.state.duration === '1' ? 'selected ' : ''}>
                       <input type="radio" name="duration" value="1" checked={this.state.duration === '1'} onChange={this.handleChange}/>
-                      1sek.
+                      1 sec
                     </label>
                     <label className={ this.state.duration === '2' ? 'selected ' : ''}>
                       <input type="radio" name="duration" value="2" checked={this.state.duration === '2'} onChange={this.handleChange}/>
-                      2sek.
+                      2 sec
                     </label>
                     <label className={ this.state.duration === '3' ? 'selected ' : ''}>
                       <input type="radio" name="duration" value="3" checked={this.state.duration === '3x'} onChange={this.handleChange}/>
-                      3sek.
+                      3 sec
                     </label>
                   </fieldset>
                 }

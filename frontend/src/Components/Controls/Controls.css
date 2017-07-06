@@ -51,7 +51,7 @@ fieldset label {
 fieldset label:hover,
 fieldset label:active,
 fieldset label:focus {
-    border-color: black;
+    border: 1px solid #FF9050;
     color: #373737;
 }
 
@@ -108,7 +108,10 @@ button:last-child{
   margin-right: 10px;
 }
 
-button:hover,
+button:hover{
+  border: 1px solid #FF9050;
+}
+
 button:active,
 button:focus {
     border: 1px solid #FF9050;
