@@ -1,3 +1,19 @@
+header{
+  padding: 0 10px;
+}
+
 h1{
   text-align: center;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: #373737;
+}
+
+h1 span{
+  color: #FF9050;
+}
+
+header img{
+  width: 50px;
+  position: absolute;
 }

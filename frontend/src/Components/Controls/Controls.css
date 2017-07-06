@@ -38,7 +38,7 @@ fieldset {
 /* value labels */
 fieldset label {
     display: inline-block;
-    color: #888;
+    color: #373737;
     padding: 5px 10px;
     border: 2px solid #888;
     margin: 0 10px 10px 0;
@@ -49,7 +49,7 @@ fieldset label:hover,
 fieldset label:active,
 fieldset label:focus {
     border-color: black;
-    color: black;
+    color: #373737;
 }
 
 fieldset label.selected {
@@ -88,10 +88,11 @@ fieldset input[type="radio"] {
 /* style buttons, reset above */
 button {
     padding: 10px;
-    color: #000;
+    color: #373737;
     margin-left: 10px;
     font-size: 20px;
     border: 1px solid #FFD3B9;
+    font-family: 'Lato', sans-serif;
 }
 
 button:last-child{
@@ -103,7 +104,7 @@ button:active,
 button:focus {
     border: 1px solid #FF9050;
     background-color: #FFD3B9;
-    color: #000;
+    color: #373737;
 }
 
 .control-bar button {

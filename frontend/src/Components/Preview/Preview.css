@@ -13,12 +13,15 @@
     padding: 10px 20px;
     margin: 0 auto 15px auto;
     text-decoration: none;
-    background-color: #CF4647;
-    color: white;
+    background-color: #FF9050;
+    color: #373737;
     border: 0;
-    border-bottom: 4px solid #fcc9c9;
     font-size: 20px;
     cursor: pointer;
+    box-shadow: 0 0 4px 0 #B3B3B3;
+    border: 1px solid #FDCCB0;
+    text-transform: uppercase;
+    font-weight: 300;
 }
 
 .download_button:active,
