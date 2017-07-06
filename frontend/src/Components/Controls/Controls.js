@@ -61,10 +61,10 @@ class Controls extends React.Component {
                       <input type="radio" name="fps" value="10" checked={this.state.fps === '10'} onChange={this.handleChange}/>
                       10fps
                     </label>
-                    <label className={ this.state.fps === '20' ? 'selected ' : ''}>
+                    {/* <label className={ this.state.fps === '20' ? 'selected ' : ''}>
                       <input type="radio" name="fps" value="20" checked={this.state.fps === '20'} onChange={this.handleChange}/>
                       20fps
-                    </label>
+                    </label> */}
                   </fieldset>
                 }
 
@@ -78,9 +78,9 @@ class Controls extends React.Component {
                       <input type="radio" name="duration" value="2" checked={this.state.duration === '2'} onChange={this.handleChange}/>
                       2sek.
                     </label>
-                    <label className={ this.state.duration === '5' ? 'selected ' : ''}>
-                      <input type="radio" name="duration" value="5" checked={this.state.duration === '5'} onChange={this.handleChange}/>
-                      5sek.
+                    <label className={ this.state.duration === '3' ? 'selected ' : ''}>
+                      <input type="radio" name="duration" value="3" checked={this.state.duration === '3x'} onChange={this.handleChange}/>
+                      3sek.
                     </label>
                   </fieldset>
                 }
