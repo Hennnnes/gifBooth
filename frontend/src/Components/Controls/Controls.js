@@ -32,9 +32,10 @@ class Controls extends React.Component {
     handleClick(e, options){
       this.setState({
         [lastOptionsVisible]: false,
-        [e.target.name]: !options
+        [e.currentTarget.name]: !options
       });
-      lastOptionsVisible = e.target.name;
+      lastOptionsVisible = e.currentTarget.name;
+      console.log(e.currentTarget.name);
     }
 
     render() {
