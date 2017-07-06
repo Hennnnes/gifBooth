@@ -64,11 +64,16 @@ fieldset input[type="radio"] {
 
 /*Styles for Control Bar*/
 .controls {
-    position: relative;
+    /*position: relative;*/
     padding-top: 50px;
     background: #F8F8F8;
     padding-bottom: 10px;
     box-shadow: 0 -2px 5px 0 rgba(0, 0, 0, 0.21);
+    position: fixed;
+    left: 50%;
+    transform: translate(-50%, 0);
+    bottom: 0;
+    width: 100%;
 }
 .control-bar {
     display: flex;
@@ -90,7 +95,7 @@ button {
     padding: 10px;
     color: #373737;
     margin-left: 10px;
-    font-size: 20px;
+    font-size: 14px;
     border: 1px solid #FFD3B9;
     font-family: 'Lato', sans-serif;
     font-weight: 300;
