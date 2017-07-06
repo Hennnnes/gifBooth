@@ -101,7 +101,7 @@ button:last-child{
 button:hover,
 button:active,
 button:focus {
-    border: 2px solid #FF9050;
+    border: 1px solid #FF9050;
     background-color: #FFD3B9;
     color: #000;
 }
