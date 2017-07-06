@@ -41,10 +41,26 @@ class Controls extends React.Component {
         return (
             <div className="controls">
               <div className="control-bar">
-                <button name="fpsOptionsVisible" onClick={(e, options) => this.handleClick(e, this.state.fpsOptionsVisible)}>FPS</button>
-                <button name="durationOptionsVisible" onClick={(e, options) => this.handleClick(e, this.state.durationOptionsVisible)}>Duration</button>
-                <button name="modeOptionsVisible" onClick={(e, options) => this.handleClick(e, this.state.modeOptionsVisible)}>Mode</button>
-                <button name="filterOptionsVisible" onClick={(e, options) => this.handleClick(e, this.state.filterOptionsVisible)}>Filter</button>
+                <button name="fpsOptionsVisible" onClick={(e, options) => this.handleClick(e, this.state.fpsOptionsVisible)}>
+                  FPS
+                  <br />
+                  <b>{this.state.fps}</b>
+                </button>
+                <button name="durationOptionsVisible" onClick={(e, options) => this.handleClick(e, this.state.durationOptionsVisible)}>
+                  Duration
+                  <br />
+                  <b>{this.state.duration} sec</b>
+                </button>
+                <button name="modeOptionsVisible" onClick={(e, options) => this.handleClick(e, this.state.modeOptionsVisible)}>
+                  Mode
+                  <br />
+                  <b>{this.state.mode}</b>
+                </button>
+                <button name="filterOptionsVisible" onClick={(e, options) => this.handleClick(e, this.state.filterOptionsVisible)}>
+                  Filter
+                  <br />
+                  <b>{this.state.filter}</b>
+                </button>
               </div>
               <form>
 
