@@ -62,9 +62,6 @@ client.on('message', function (topic, message) {
   const filter = message[4].replace(' ', '');
   const name = generateRandomName();
 
-  console.log(fps);
-  fps = fps + 5;
-  console.log(fps);
 
   // expose camera and log
   removeOldFile('movie.mjpg');
