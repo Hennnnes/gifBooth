@@ -58,10 +58,7 @@ client.on('message', function (topic, message) {
   console.log('test');
 
   // get parameters from message
-  let duration = parseInt(message[1].replace(' ', ''));
-  console.log(duration);
-  duration = duration + 1;
-  console.log(duration);
+  let duration = parseInt(message[1].replace(' ', '')) + 1;
   let fps = parseInt(message[2].replace(' ', ''));
   const mode = message[3].replace(' ', '');
   const filter = message[4].replace(' ', '');
@@ -104,20 +101,8 @@ client.on('message', function (topic, message) {
 
     console.log(createStringFromArray(riesenArray));
 
-
-  //
-  // if(filter != 'filterNormal' ) {
-  //   var data = base64Img.base64Sync('files/' + name + '/outputFilter.gif');
-  // } else {
-  //   var data = base64Img.base64Sync('files/' + name + '/output.gif');
-  // }
-  // console.log('base64 generated');
-  //
-  // setTimeout(function() {
-  //     client.publish('testtopic/gifBoothTest', data);
-  //     console.log('Published: ' + data.slice(0,21));
-  //     serverIsFree = true;
-  // }, 2000);
+    exec(createStringFromArray(riesenArray));
+  
 });
 
 
