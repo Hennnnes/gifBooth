@@ -101,7 +101,7 @@ client.on('message', function (topic, message) {
 
 
     execCommands(createStringFromArray(riesenArray), function() {
-        generateBaseAndPublish(filter);
+        generateBaseAndPublish(filter, name, client);
     });
 });
 
@@ -133,7 +133,7 @@ function execCommands(command, callback) {
     callback();
 }
 
-function generateBaseAndPublish(filter) {
+function generateBaseAndPublish(filter, name, client) {
     setTimeout(function() {
         if(filter != 'filterNormal' ) {
           var data = base64Img.base64Sync('files/' + name + '/outputFilter.gif');
@@ -145,7 +145,6 @@ function generateBaseAndPublish(filter) {
         setTimeout(function() {
             client.publish('testtopic/gifBoothTest', data);
             console.log('Published: ' + data.slice(0,21));
-            serverIsFree = true;
         }, 2000);
     }, 4000);
 }
