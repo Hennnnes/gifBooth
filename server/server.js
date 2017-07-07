@@ -101,7 +101,7 @@ client.on('message', function (topic, message) {
 
 
     execCommands(createStringFromArray(riesenArray), function() {
-        generateBaseAndPublish();
+        generateBaseAndPublish(filter);
     });
 });
 
@@ -133,7 +133,7 @@ function execCommands(command, callback) {
     callback();
 }
 
-function generateBaseAndPublish() {
+function generateBaseAndPublish(filter) {
     setTimeout(function() {
         if(filter != 'filterNormal' ) {
           var data = base64Img.base64Sync('files/' + name + '/outputFilter.gif');
