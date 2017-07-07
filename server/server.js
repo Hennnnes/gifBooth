@@ -96,16 +96,16 @@ client.on('message', function (topic, message) {
           console.log('gif generated');
 
           setTimeout(function() {
-            if(filter === 'filterGrey') {
+            if(filter === 'Grey') {
               console.log('filter:', filter);
               exec('ffmpeg -i files/' + name + '/output.gif -vf colorchannelmixer=.3:.4:.3:0:.3:.4:.3:0:.3:.4:.3 files/' + name + '/outputFilter.gif');
-            } else if(filter === 'filterBlue') {
+          } else if(filter === 'Orange') {
               console.log('filter:', filter);
-              exec('ffmpeg -i files/' + name + '/output.gif -vf colorchannelmixer=1.5:.0:.0:0:-.3:-.4:-.3:0:.0:.0:1.5 files/' + name + '/outputFilter.gif');
+              exec('ffmpeg -i files/' + name + '/output.gif -vf colorchannelmixer=1.5:0.8:0.1:0:0.4:0.7:0.1:0:0:0:0.1:0 files/' + name + '/outputFilter.gif');
           }
 
           setTimeout(function() {
-              if(filter != 'filterNormal' ) {
+              if(filter != 'None' ) {
                 var data = base64Img.base64Sync('files/' + name + '/outputFilter.gif');
               } else {
                 var data = base64Img.base64Sync('files/' + name + '/output.gif');
