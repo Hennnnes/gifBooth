@@ -12,7 +12,7 @@ class Controls extends React.Component {
             fps: '5',
             duration: '2',
             mode: 'normal',
-            filter: 'filterNormal',
+            filter: 'None',
             fpsOptionsVisible: false,
             durationOptionsVisible: false,
             modeOptionsVisible: false,
@@ -121,17 +121,17 @@ class Controls extends React.Component {
 
                 {this.state.filterOptionsVisible &&
                   <fieldset>
-                    <label className={ this.state.filter === 'filterNormal' ? 'selected ' : ''}>
-                      <input type="radio" name="filter" value="filterNormal" checked={this.state.filter === 'filterNormal'} onChange={this.handleChange}/>
+                    <label className={ this.state.filter === 'None' ? 'selected ' : ''}>
+                      <input type="radio" name="filter" value="None" checked={this.state.filter === 'None'} onChange={this.handleChange}/>
                       No Filter
                     </label>
-                    <label className={ this.state.filter === 'filterGrey' ? 'selected ' : ''}>
-                      <input type="radio" name="filter" value="filterGrey" checked={this.state.filter === 'filterGrey'} onChange={this.handleChange}/>
+                    <label className={ this.state.filter === 'Grey' ? 'selected ' : ''}>
+                      <input type="radio" name="filter" value="Grey" checked={this.state.filter === 'Grey'} onChange={this.handleChange}/>
                       Grey
                     </label>
-                    <label className={ this.state.filter === 'filterBlue' ? 'selected ' : ''}>
-                      <input type="radio" name="filter" value="filterBlue" checked={this.state.filter === 'filterBlue'} onChange={this.handleChange}/>
-                      Blue
+                    <label className={ this.state.filter === 'Orange' ? 'selected ' : ''}>
+                      <input type="radio" name="filter" value="Orange" checked={this.state.filter === 'Orange'} onChange={this.handleChange}/>
+                      Orange
                     </label>
                   </fieldset>
                 }

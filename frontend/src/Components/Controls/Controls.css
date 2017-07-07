@@ -33,7 +33,7 @@ fieldset {
     min-width: 0;
     text-align: center;
     font-family: 'Lato', sans-serif;
-    font-weight: 300;
+    font-weight: 500;
     padding-top: 10px;
 }
 
@@ -101,7 +101,11 @@ button {
     font-size: 14px;
     border: 1px solid #FFD3B9;
     font-family: 'Lato', sans-serif;
-    font-weight: 300;
+    font-weight: 500;
+}
+
+button b{
+  font-weight: 700;
 }
 
 button:last-child{
