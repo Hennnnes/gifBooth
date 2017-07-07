@@ -98,7 +98,7 @@ client.on('message', function (topic, message) {
           setTimeout(function() {
             if(filter === 'Grey') {
               console.log('filter:', filter);
-              exec('ffmpeg -i files/' + name + '/output.gif -vf colorchannelmixer=.3:.4:.3:0:.3:.4:.3:0:.3:.4:.3 files/' + name + '/outputFilter.gif');
+              exec('ffmpeg -i files/' + name + '/output.gif -vf colorchannelmixer=.299:.587:.114:0:.299:.587:.114:0:.299:.587:.114:0: files/' + name + '/outputFilter.gif');
           } else if(filter === 'Orange') {
               console.log('filter:', filter);
               exec('ffmpeg -i files/' + name + '/output.gif -vf colorchannelmixer=1.5:0.8:0.1:0:0.4:0.7:0.1:0:0:0:0.1:0 files/' + name + '/outputFilter.gif');
