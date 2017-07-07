@@ -51,7 +51,6 @@ client.on('message', function (topic, message) {
   // Server begins process now
   serverIsFree = false;
   client.publish('testtopic/gifBoothTest', 'status: process started');
-  console.log('test');
 
   // get parameters from message
   let duration = parseInt(message[1].replace(' ', ''));
@@ -165,7 +164,7 @@ function combineMovies(filename) {
 
 function generateGif(name, fps) {
     // generate gif with custom palette
-     exec('ffmpeg -i files/' + name + '/output.mjpg -filter_complex \ "fps=' + fps + ',scale=400:-1" -framerate ' + fps/2 + ' files/' + name + '/output.gif', logExec(showLogs));
+     exec('ffmpeg -i files/' + name + '/output.mjpg -filter_complex \ "fps=' + fps + ',scale=400:-1" files/' + name + '/output.gif', logExec(showLogs));
 }
 
 function generateRandomName() {
