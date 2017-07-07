@@ -9,7 +9,7 @@
 }
 
 .download_button {
-    display: inline-block;
+    display: none;
     padding: 10px 20px;
     margin: 0 auto 15px auto;
     text-decoration: none;
