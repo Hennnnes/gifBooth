@@ -10,158 +10,216 @@ const exec = require('child_process').exec;
 const showLogs = true;
 let serverIsFree = true;
 
-
 /* MQTT on connect to topic */
-client.on('connect', function () {
+client.on('connect', function() {
     client.subscribe('testtopic/gifBoothTest');
     console.log('connected to testtopic/gifBoothTest')
 });
 
 /* MQTT in disconnected */
-client.on('disconnected', function () {
+client.on('disconnected', function() {
     console.log('disconnected');
 });
 
-client.on('message', function (topic, message) {
-  // message is Buffer
-  message = message.toString();
+client.on('message', function(topic, message) {
+    // frontend check if server is free, publish mqtt msg
+    if (message === 'free?') {
+        client.publish('testtopic/gifBoothTest', 'free: ' + serverIsFree);
+    }
 
-  const messageIsGif = (message.slice(0,21) === 'data:image/gif;base64');
-  if (messageIsGif) {
-      console.log('received gif');
-  }
+    // return if server is in use
+    if (!serverIsFree) {
+        console.log('server already in use');
+        return;
+    }
 
-  if (message === 'free?') {
-      client.publish('testtopic/gifBoothTest', 'free: ' + serverIsFree);
-  }
+    // convert message from buffer to string
+    message = message.toString();
 
-  // if (!serverIsFree) {
-  //     console.log('server already in use');
-  //     return;
-  // }
+    // split message and get values
+    console.log(message);
+    message = message.split(",");
+    if (message[0] != 'expose') {
+        return;
+    }
 
-  // split message and get values
-  console.log(message);
-  message = message.split(",");
-  if (message[0] != 'expose') {
-      console.log('message makes no sense');
-      return;
-  }
+    // Server begins process now
+    serverIsFree = false;
+    client.publish('testtopic/gifBoothTest', 'status: process started');
 
-  // Server begins process now
-  serverIsFree = false;
-  client.publish('testtopic/gifBoothTest', 'status: process started');
+    // get parameters from message
+    let duration = parseInt(message[1].replace(' ', ''));
+    console.log(duration);
+    duration = duration + 1;
+    console.log(duration);
+    let fps = parseInt(message[2].replace(' ', ''));
+    const mode = message[3].replace(' ', '');
+    const filter = message[4].replace(' ', '');
+    const name = generateRandomName();
 
-  // get parameters from message
-  let duration = parseInt(message[1].replace(' ', ''));
-  console.log(duration);
-  duration = duration + 1;
-  console.log(duration);
-  let fps = parseInt(message[2].replace(' ', ''));
-  const mode = message[3].replace(' ', '');
-  const filter = message[4].replace(' ', '');
-  const name = generateRandomName();
+    // remove old file
+    exec(removeOldFile('movie.mjpg'), function(err, stdout, stderr) {
+        if (err) {
+            return err;
+        } else {
+            // expose camera for given duration
+            exec(exposeCamera(duration), function(err, stdout, stderr) {
+                if (err) {
+                    return err;
+                } else {
 
+                    // create folder to move file to
+                    exec(createFolder(name), function(err, stdout, stderr) {
+                        if (err) {
+                            return err;
+                        } else {
 
-  // expose camera and log
-  removeOldFile('movie.mjpg');
-  exposeCamera(duration);
-  console.log('camera exposed');
+                            exec(moveVideo('movie.mjpg', 'files/' + name + '/movie.mjpg'), function(err, stdout, stderr) {
+                                if (err) {
+                                    return err;
+                                } else {
 
-  setTimeout(function() {
-      createFolder(name);
-      console.log('folder created');
-      moveVideo('movie.mjpg', 'files/'+ name +'/movie.mjpg');
-      console.log('video moved');
+                                    switch (mode) {
+                                        case 'boomerang':
+                                            if (boomerangMode(name)) {
+                                                break;
+                                            } else {
+                                                return 'boomerang action error';
+                                            }
+                                        case 'reverse':
+                                            if (reverseMode(name)) {
+                                                break;
+                                            } else {
+                                                return 'reverse action error';
+                                            }
+                                        default:
+                                            if (normalMode(name)) {
+                                                break;
+                                            } else {
+                                                return 'normal mode error';
+                                            }
+                                    }
 
-      switch (mode) {
-          case 'boomerang':
-              reverseMovie(name);
-              setTimeout(function() {
-                  combineMovies(name);
-              }, 6000);
-              break;
-          case 'reverse':
-              reverseMovie(name);
-              setTimeout(function() {
-                  renameFile('files/' + name + '/reverse.mjpg', 'files/' + name +'/output.mjpg');
-              }, 4000);
-              break;
-          default:
-              renameFile('files/' + name + '/movie.mjpg', 'files/' + name +'/output.mjpg');
-      }
+                                    exec(generateGif(name, fps), function(err, stdout, stderr) {
+                                        if (err) {
+                                            return err;
+                                        } else {
+                                            if (!applyFilter(name, filter)) {
+                                                // break because error in applyFilter
+                                                return 'error in apply filter';
+                                            } else {
+                                                var data = base64Img.base64Sync('files/' + name + '/output.gif');
 
-      setTimeout(function() {
-          generateGif(name, fps);
-          console.log('gif generated');
-
-          setTimeout(function() {
-            if(filter === 'Grey') {
-              console.log('filter:', filter);
-              exec('ffmpeg -i files/' + name + '/output.gif -vf colorchannelmixer=.299:.587:.114:0:.299:.587:.114:0:.299:.587:.114:0: files/' + name + '/outputFilter.gif');
-          } else if(filter === 'Orange') {
-              console.log('filter:', filter);
-              exec('ffmpeg -i files/' + name + '/output.gif -vf colorchannelmixer=1.5:0.8:0.1:0:0.4:0.7:0.1:0:0:0:0.1:0 files/' + name + '/outputFilter.gif');
-          }
-
-          setTimeout(function() {
-              if(filter != 'None' ) {
-                var data = base64Img.base64Sync('files/' + name + '/outputFilter.gif');
-              } else {
-                var data = base64Img.base64Sync('files/' + name + '/output.gif');
-              }
-              console.log('base64 generated');
-
-              setTimeout(function() {
-                  client.publish('testtopic/gifBoothTest', data);
-                  console.log('Published: ' + data.slice(0,21));
-                  serverIsFree = true;
-              }, 2000);
-          }, 4000);
-        }, 4000);
-      }, 10000);
-  }, 6000);
-
+                                                // publish final message
+                                                client.publish('testtopic/gifBoothTest', data);
+                                                console.log('Published: ' + data.slice(0, 21));
+                                                serverIsFree = true;
+                                            };
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+        }
+    });
 });
 
-
-/* Functions */
-function logExec(log) {
-    console.log('process');
+/* MODE Functions */
+function boomerangMode(name) {
+    exec(reverseMovie(name), function(err, stdout, stderr) {
+        if (err) {
+            return err;
+        } else {
+            exec(combineMovies(name), function(err, stdout, stderr) {
+                if (err) { return err; } else {
+                    return true;
+                }
+            });
+        }
+    });
 }
 
+function reverseMode(name) {
+    exec(reverseMovie(name), function(err, stdout, stderr) {
+        if (err) {
+            return err;
+        } else {
+            exec(renameFile('files/' + name + '/reverse.mjpg', 'files/' + name + '/output.mjpg'), function(err, stdout, stderr) {
+                if (err) { return err; } else {
+                    return true;
+                }
+            });
+        }
+    });
+}
+
+function normalMode(name) {
+    exec(renameFile('files/' + name + '/movie.mjpg', 'files/' + name + '/output.mjpg'), function(err, stdout, stderr) {
+        if (err) {
+            return err;
+        } else {
+            return true;
+        }
+    });
+}
+
+/* filter functions */
+function applyFilter(name, filter) {
+    var command = '';
+    switch (filter) {
+        case 'Grey':
+            command = 'ffmpeg -i files/' + name + '/output.gif -vf colorchannelmixer=.299:.587:.114:0:.299:.587:.114:0:.299:.587:.114:0: files/' + name + '/outputFilter.gif';
+            break;
+        case 'Orange':
+            command = 'ffmpeg -i files/' + name + '/output.gif -vf colorchannelmixer=1.5:0.8:0.1:0:0.4:0.7:0.1:0:0:0:0.1:0 files/' + name + '/outputFilter.gif';
+            break;
+        default:
+            command = 'mv files/' + name + '/output.gif files/' + name + '/outputFilter.gif';
+    }
+
+    exec(command, function(err, stdout, stderr) {
+        if (err) {
+            return err;
+        } else {
+            return true;
+        }
+    });
+}
+
+/* Functions */
 function removeOldFile(filename) {
-    exec('rm -rf ' + filename, logExec(showLogs));
+    return 'rm -rf ' + filename;
 }
 
 function exposeCamera(duration) {
-    exec('gphoto2 --capture-movie='+duration+'s', logExec(showLogs));
+    return 'gphoto2 --capture-movie=' + duration + 's';
 }
 
 function createFolder(filename) {
-    exec('mkdir files/' + filename, logExec(showLogs));
+    'mkdir files/' + filename;
 }
 
 function moveVideo(oldFile, newFile) {
-    exec('mv ' + oldFile + ' ' + newFile, logExec(showLogs));
+    return 'mv ' + oldFile + ' ' + newFile;
 }
 
 function reverseMovie(filename) {
-    exec('ffmpeg -i files/' + filename + '/movie.mjpg -vf reverse files/' + filename + '/reverse.mjpg', logExec(showLogs));
+    return 'ffmpeg -i files/' + filename + '/movie.mjpg -vf reverse files/' + filename + '/reverse.mjpg';
 }
 
-
 function renameFile(oldfilename, newfilename) {
-    exec('mv '+ oldfilename + ' ' + newfilename, logExec(showLogs));
+    return 'mv ' + oldfilename + ' ' + newfilename;
 }
 
 function combineMovies(filename) {
-    exec('ffmpeg -i "concat:files/' + filename + '/movie.mjpg|files/' + filename + '/reverse.mjpg" -codec copy files/' + filename + '/output.mjpg', logExec(showLogs));
+    return 'ffmpeg -i "concat:files/' + filename + '/movie.mjpg|files/' + filename + '/reverse.mjpg" -codec copy files/' + filename + '/output.mjpg';
 }
 
 function generateGif(name, fps) {
-    // generate gif with custom palette
-     exec('ffmpeg -i files/' + name + '/output.mjpg -filter_complex \ "fps=' + fps + ',scale=400:-1" files/' + name + '/output.gif', logExec(showLogs));
+    return 'ffmpeg -i files/' + name + '/output.mjpg -filter_complex \ "fps=' + fps + ',scale=400:-1" files/' + name + '/output.gif';
 }
 
 function generateRandomName() {
