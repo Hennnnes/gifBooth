@@ -57,7 +57,7 @@ class Controls extends React.Component {
                   <br />
                   <b>{this.state.mode}</b>
                 </button>
-                <button className={this.state.filterOptionsVisible ? 'active' : ''} name="filterOptionsVisible" onClick={(e, options) => this.handleClick(e, this.state.filterOptionsVisible)}>
+                <button className={this.state.filterOptionsVisible ? 'active' : 's'} name="filterOptionsVisible" onClick={(e, options) => this.handleClick(e, this.state.filterOptionsVisible)}>
                   Filter
                   <br />
                   <b>{this.state.filter}</b>
