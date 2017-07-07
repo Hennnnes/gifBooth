@@ -103,8 +103,6 @@ client.on('message', function (topic, message) {
     execCommands(createStringFromArray(riesenArray), function() {
         generateBaseAndPublish();
     });
-
-
 });
 
 

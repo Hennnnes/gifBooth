@@ -42,22 +42,22 @@ class Controls extends React.Component {
         return (
             <div className="controls">
               <div className="control-bar">
-                <button name="fpsOptionsVisible" onClick={(e, options) => this.handleClick(e, this.state.fpsOptionsVisible)}>
+                <button className={this.state.fpsOptionsVisible ? 'active' : ''} name="fpsOptionsVisible" onClick={(e, options) => this.handleClick(e, this.state.fpsOptionsVisible)}>
                   FPS
                   <br />
                   <b>{this.state.fps}</b>
                 </button>
-                <button name="durationOptionsVisible" onClick={(e, options) => this.handleClick(e, this.state.durationOptionsVisible)}>
+                <button className={this.state.durationOptionsVisible ? 'active' : ''} name="durationOptionsVisible" onClick={(e, options) => this.handleClick(e, this.state.durationOptionsVisible)}>
                   Duration
                   <br />
                   <b>{this.state.duration} sec</b>
                 </button>
-                <button name="modeOptionsVisible" onClick={(e, options) => this.handleClick(e, this.state.modeOptionsVisible)}>
+                <button className={this.state.modeOptionsVisible ? 'active' : ''} name="modeOptionsVisible" onClick={(e, options) => this.handleClick(e, this.state.modeOptionsVisible)}>
                   Mode
                   <br />
                   <b>{this.state.mode}</b>
                 </button>
-                <button name="filterOptionsVisible" onClick={(e, options) => this.handleClick(e, this.state.filterOptionsVisible)}>
+                <button className={this.state.filterOptionsVisible ? 'active' : 's'} name="filterOptionsVisible" onClick={(e, options) => this.handleClick(e, this.state.filterOptionsVisible)}>
                   Filter
                   <br />
                   <b>{this.state.filter}</b>
