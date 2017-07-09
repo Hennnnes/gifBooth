@@ -96,7 +96,7 @@ client.on('message', function(topic, message) {
 																		if(err) {
 																			return err;
 																		} else {
-																			var data = base64Img.base64Sync('files/' + name + '/output.gif');
+																			var data = base64Img.base64Sync('files/' + name + '/outputFilter.gif');
 
 																			// publish final message
 																			client.publish('testtopic/gifBoothTest', data);
@@ -133,7 +133,7 @@ client.on('message', function(topic, message) {
                                                 // break because error in applyFilter
                                                 return 'error in apply filter';
                                             } else {
-                                                var data = base64Img.base64Sync('files/' + name + '/output.gif');
+                                                var data = base64Img.base64Sync('files/' + name + '/outputFilter.gif');
 
                                                 // publish final message
                                                 client.publish('testtopic/gifBoothTest', data);
