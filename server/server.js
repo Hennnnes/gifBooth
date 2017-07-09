@@ -92,16 +92,19 @@ client.on('message', function(topic, message) {
 																if (err) {
 																	return err;
 																} else {
-																	if (!applyFilter(name, filter)) {
-																		// break because error in applyFilter
-																		return 'error in apply filter';
-																	} else {
-																		var data = base64Img.base64Sync('files/' + name + '/output.gif');
+																	exec(applyFilter(name, filter), function(err, stdout, stderr) {
+																		if(err) {
+																			return err;
+																		} else {
+																			var data = base64Img.base64Sync('files/' + name + '/output.gif');
 
-																		// publish final message
-																		client.publish('testtopic/gifBoothTest', data);
-																		console.log('Published: ' + data.slice(0, 21));
-																		serverIsFree = true;
+																			// publish final message
+																			client.publish('testtopic/gifBoothTest', data);
+																			console.log('Published: ' + data.slice(0, 21));
+																			serverIsFree = true;
+																		}
+																	}
+
 																	};
 																}
 															});
@@ -203,12 +206,7 @@ function applyFilter(name, filter) {
             command = 'mv files/' + name + '/output.gif files/' + name + '/outputFilter.gif';
     }
 
-    exec(command, function(err, stdout, stderr) {
-        if (err) {
-            return err;
-        } else {
-            return true;
-        }
+	return command;
     });
 }
 
