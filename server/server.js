@@ -1,6 +1,6 @@
 // requires
 const mqtt = require('mqtt');
-const client = mqtt.connect('mqtt:broker.mqttdashboard.com');
+const client = mqtt.connect('mqtt:test.mosquitto.org');
 
 const base64Img = require('base64-img');
 
@@ -13,6 +13,7 @@ let serverIsFree = true;
 /* MQTT on connect to topic */
 client.on('connect', function() {
     client.subscribe('testtopic/gifBoothTest');
+	client.publish('testtopic/gifBoothTest', 'expose, 3, 5, boomerang');
     console.log('connected to testtopic/gifBoothTest')
 });
 
@@ -81,11 +82,33 @@ client.on('message', function(topic, message) {
 
                                     switch (mode) {
                                         case 'boomerang':
-                                            if (boomerangMode(name)) {
-                                                break;
-                                            } else {
-                                                return 'boomerang action error';
-                                            }
+											exec(reverseMovie(name), function(err, stdout, stderr) {
+												if (err) {
+													return err;
+												} else {
+													exec(combineMovies(name), function(err, stdout, stderr) {
+														if (err) { return err; } else {
+															exec(generateGif(name, fps), function(err, stdout, stderr) {
+																if (err) {
+																	return err;
+																} else {
+																	if (!applyFilter(name, filter)) {
+																		// break because error in applyFilter
+																		return 'error in apply filter';
+																	} else {
+																		var data = base64Img.base64Sync('files/' + name + '/output.gif');
+
+																		// publish final message
+																		client.publish('testtopic/gifBoothTest', data);
+																		console.log('Published: ' + data.slice(0, 21));
+																		serverIsFree = true;
+																	};
+																}
+															});
+														}
+													});
+												}
+											});
                                         case 'reverse':
                                             if (reverseMode(name)) {
                                                 break;
@@ -191,11 +214,11 @@ function applyFilter(name, filter) {
 
 /* Functions */
 function removeOldFile(filename) {
-    return 'rm -rf ' + filename;
+    //return 'rm -rf ' + filename;
 }
 
 function exposeCamera(duration) {
-    return 'gphoto2 --capture-movie=' + duration + 's';
+    //return 'gphoto2 --capture-movie=' + duration + 's';
 }
 
 function createFolder(filename) {
