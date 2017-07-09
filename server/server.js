@@ -206,7 +206,6 @@ function applyFilter(name, filter) {
     }
 
 	return command;
-    });
 }
 
 /* Functions */
