@@ -103,10 +103,9 @@ client.on('message', function(topic, message) {
 																			console.log('Published: ' + data.slice(0, 21));
 																			serverIsFree = true;
 																		}
-																	}
+																	});
 
-																	};
-																}
+																};
 															});
 														}
 													});
