@@ -13,7 +13,7 @@ let serverIsFree = true;
 /* MQTT on connect to topic */
 client.on('connect', function() {
     client.subscribe('testtopic/gifBoothTest');
-	client.publish('testtopic/gifBoothTest', 'expose, 3, 5, boomerang');
+	client.publish('testtopic/gifBoothTest', 'expose, 3, 5, boomerang,');
     console.log('connected to testtopic/gifBoothTest')
 });
 
