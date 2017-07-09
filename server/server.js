@@ -199,7 +199,7 @@ function exposeCamera(duration) {
 }
 
 function createFolder(filename) {
-    'mkdir files/' + filename;
+    return 'mkdir files/' + filename;
 }
 
 function moveVideo(oldFile, newFile) {
