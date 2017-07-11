@@ -5,7 +5,7 @@ var options = {
 	password: 'schuh+-0',
 }
 
-const client = mqtt.connect('mqtt:diginet.mt.haw-hamburg.de', options);
+const client = mqtt.connect('mqtt:broker.mqttdashboard.com');
 
 const base64Img = require('base64-img');
 
@@ -104,7 +104,7 @@ client.on('message', function(topic, message) {
 
 																			// publish final message
 																			client.publish('testtopic/gifBoothTest', data);
-																			console.log('Published: ' + data.slice(0, 21));
+																			//console.log('Published: ' + data.slice(0, 21));
 																			serverIsFree = true;
 																		}
 																	});
