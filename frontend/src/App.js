@@ -5,7 +5,7 @@ import Header from './Components/Header/Header';
 import Preview from './Components/Preview/Preview';
 import Controls from './Components/Controls/Controls';
 
- const client = new window.Messaging.Client(`broker.mqttdashboard.com`, 8000, `myclientid_${parseInt(Math.random() * 100, 10)}`);
+ const client = new window.Messaging.Client(`diginet.mt.haw-hamburg.de`, 8000, `myclientid_${parseInt(Math.random() * 100, 10)}`);
 
 class App extends Component {
   constructor() {
@@ -37,6 +37,8 @@ class App extends Component {
 
       const options = {
           timeout: 5,
+          userName: "haw",
+          password: "schuh+-0",
           //Gets Called if the connection has sucessfully been established
           onSuccess: function () {
               console.log('connected to mqtt broker');
