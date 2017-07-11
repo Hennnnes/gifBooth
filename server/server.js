@@ -185,44 +185,6 @@ client.on('message', function(topic, message) {
     });
 });
 
-/* MODE Functions */
-function boomerangMode(name) {
-    exec(reverseMovie(name), function(err, stdout, stderr) {
-        if (err) {
-            return err;
-        } else {
-            exec(combineMovies(name), function(err, stdout, stderr) {
-                if (err) { return err; } else {
-                    return true;
-                }
-            });
-        }
-    });
-}
-
-function reverseMode(name) {
-    exec(reverseMovie(name), function(err, stdout, stderr) {
-        if (err) {
-            return err;
-        } else {
-            exec(renameFile('files/' + name + '/reverse.mjpg', 'files/' + name + '/output.mjpg'), function(err, stdout, stderr) {
-                if (err) { return err; } else {
-                    return true;
-                }
-            });
-        }
-    });
-}
-
-function normalMode(name) {
-    exec(renameFile('files/' + name + '/movie.mjpg', 'files/' + name + '/output.mjpg'), function(err, stdout, stderr) {
-        if (err) {
-            return err;
-        } else {
-            return true;
-        }
-    });
-}
 
 /* filter functions */
 function applyFilter(name, filter) {
