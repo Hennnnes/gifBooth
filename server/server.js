@@ -115,6 +115,7 @@ client.on('message', function(topic, message) {
 													});
 												}
 											});
+											break;
 											
                                         case 'reverse':
 											exec(reverseMovie(name), function(err, stdout, stderr) {
@@ -146,6 +147,7 @@ client.on('message', function(topic, message) {
 													});
 												}
 											});
+											break;
 											
                                         default:
 											exec(renameFile('files/' + name + '/movie.mjpg', 'files/' + name + '/output.mjpg'), function(err, stdout, stderr) {
@@ -174,6 +176,7 @@ client.on('message', function(topic, message) {
 													});
 												}
 											});
+										break;
                                     }
                                 }
                             });
