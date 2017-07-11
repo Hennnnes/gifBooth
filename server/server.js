@@ -1,6 +1,11 @@
 // requires
 const mqtt = require('mqtt');
-const client = mqtt.connect('mqtt:test.mosquitto.org');
+var options = {
+	username: 'haw',
+	password: 'schuh+-0',
+}
+
+const client = mqtt.connect('mqtt:diginet.mt.haw-hamburg.de', options);
 
 const base64Img = require('base64-img');
 
