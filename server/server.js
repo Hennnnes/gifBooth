@@ -18,7 +18,6 @@ let serverIsFree = true;
 /* MQTT on connect to topic */
 client.on('connect', function() {
     client.subscribe('testtopic/gifBoothTest');
-	client.publish('testtopic/gifBoothTest', 'expose, 3, 5, boomerang,');
     console.log('connected to testtopic/gifBoothTest')
 });
 
@@ -116,6 +115,7 @@ client.on('message', function(topic, message) {
 													});
 												}
 											});
+											break;
 											
                                         case 'reverse':
 											exec(reverseMovie(name), function(err, stdout, stderr) {
@@ -136,7 +136,7 @@ client.on('message', function(topic, message) {
 
 																			// publish final message
 																			client.publish('testtopic/gifBoothTest', data);
-																			console.log('Published: ' + data.slice(0, 21));
+																			//console.log('Published: ' + data.slice(0, 21));
 																			serverIsFree = true;
 																		}
 																	});
@@ -147,6 +147,7 @@ client.on('message', function(topic, message) {
 													});
 												}
 											});
+											break;
 											
                                         default:
 											exec(renameFile('files/' + name + '/movie.mjpg', 'files/' + name + '/output.mjpg'), function(err, stdout, stderr) {
@@ -158,6 +159,7 @@ client.on('message', function(topic, message) {
 															return err;
 														} else {
 															exec(applyFilter(name, filter), function(err, stdout, stderr) {
+																console.log("appliedFilter");
 																if(err) {
 																	return err;
 																} else {
@@ -165,7 +167,7 @@ client.on('message', function(topic, message) {
 
 																	// publish final message
 																	client.publish('testtopic/gifBoothTest', data);
-																	console.log('Published: ' + data.slice(0, 21));
+																	//console.log('Published: ' + data.slice(0, 21));
 																	serverIsFree = true;
 																}
 															});
@@ -174,6 +176,7 @@ client.on('message', function(topic, message) {
 													});
 												}
 											});
+										break;
                                     }
                                 }
                             });
