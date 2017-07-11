@@ -157,6 +157,7 @@ client.on('message', function(topic, message) {
 															return err;
 														} else {
 															exec(applyFilter(name, filter), function(err, stdout, stderr) {
+																console.log("appliedFilter");
 																if(err) {
 																	return err;
 																} else {
@@ -164,7 +165,7 @@ client.on('message', function(topic, message) {
 
 																	// publish final message
 																	client.publish('testtopic/gifBoothTest', data);
-																	console.log('Published: ' + data.slice(0, 21));
+																	//console.log('Published: ' + data.slice(0, 21));
 																	serverIsFree = true;
 																}
 															});
