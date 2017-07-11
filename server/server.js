@@ -116,37 +116,65 @@ client.on('message', function(topic, message) {
 													});
 												}
 											});
+											
                                         case 'reverse':
-                                            if (reverseMode(name)) {
-                                                break;
-                                            } else {
-                                                return 'reverse action error';
-                                            }
+											exec(reverseMovie(name), function(err, stdout, stderr) {
+												if (err) {
+													return err;
+												} else {
+													exec(renameFile('files/' + name + '/reverse.mjpg', 'files/' + name + '/output.mjpg'), function(err, stdout, stderr) {
+														if (err) { return err; } else {
+															exec(generateGif(name, fps), function(err, stdout, stderr) {
+																if (err) {
+																	return err;
+																} else {
+																	exec(applyFilter(name, filter), function(err, stdout, stderr) {
+																		if(err) {
+																			return err;
+																		} else {
+																			var data = base64Img.base64Sync('files/' + name + '/outputFilter.gif');
+
+																			// publish final message
+																			client.publish('testtopic/gifBoothTest', data);
+																			console.log('Published: ' + data.slice(0, 21));
+																			serverIsFree = true;
+																		}
+																	});
+
+																};
+															});
+														}
+													});
+												}
+											});
+											
                                         default:
-                                            if (normalMode(name)) {
-                                                break;
-                                            } else {
-                                                return 'normal mode error';
-                                            }
+											exec(renameFile('files/' + name + '/movie.mjpg', 'files/' + name + '/output.mjpg'), function(err, stdout, stderr) {
+												if (err) {
+													return err;
+												} else {
+													exec(generateGif(name, fps), function(err, stdout, stderr) {
+														if (err) {
+															return err;
+														} else {
+															exec(applyFilter(name, filter), function(err, stdout, stderr) {
+																if(err) {
+																	return err;
+																} else {
+																	var data = base64Img.base64Sync('files/' + name + '/outputFilter.gif');
+
+																	// publish final message
+																	client.publish('testtopic/gifBoothTest', data);
+																	console.log('Published: ' + data.slice(0, 21));
+																	serverIsFree = true;
+																}
+															});
+
+														};
+													});
+												}
+											});
                                     }
-
-                                    exec(generateGif(name, fps), function(err, stdout, stderr) {
-                                        if (err) {
-                                            return err;
-                                        } else {
-                                            if (!applyFilter(name, filter)) {
-                                                // break because error in applyFilter
-                                                return 'error in apply filter';
-                                            } else {
-                                                var data = base64Img.base64Sync('files/' + name + '/outputFilter.gif');
-
-                                                // publish final message
-                                                client.publish('testtopic/gifBoothTest', data);
-                                                console.log('Published: ' + data.slice(0, 21));
-                                                serverIsFree = true;
-                                            };
-                                        }
-                                    });
                                 }
                             });
                         }
@@ -215,11 +243,11 @@ function applyFilter(name, filter) {
 
 /* Functions */
 function removeOldFile(filename) {
-    //return 'rm -rf ' + filename;
+    return 'rm -rf ' + filename;
 }
 
 function exposeCamera(duration) {
-    //return 'gphoto2 --capture-movie=' + duration + 's';
+    return 'gphoto2 --capture-movie=' + duration + 's';
 }
 
 function createFolder(filename) {
