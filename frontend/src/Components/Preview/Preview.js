@@ -24,7 +24,7 @@ class Preview extends React.Component {
         <div className="preview_wrapper">
           {this.props.visible ? <Loader /> :  <img src={this.props.url} alt="some waiting gif" className="preview_image"/>}
           {/* <img src={props.url} alt="some waiting gif" className="preview_image"/> */}
-          <a href={this.props.url} download="test.gif" className={downloadClassName}>download</a>
+          <a href={this.props.url} download="awesome.gif" className={downloadClassName}>download</a>
         </div>
     )
   }
