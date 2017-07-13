@@ -129,10 +129,6 @@ class Controls extends React.Component {
                       <input type="radio" name="filter" value="Grey" checked={this.state.filter === 'Grey'} onChange={this.handleChange}/>
                       Grey
                     </label>
-                    <label className={ this.state.filter === 'Orange' ? 'selected ' : ''}>
-                      <input type="radio" name="filter" value="Orange" checked={this.state.filter === 'Orange'} onChange={this.handleChange}/>
-                      Orange
-                    </label>
                   </fieldset>
                 }
 
