@@ -6,7 +6,7 @@ let lastOptionsVisible;
 
 class Controls extends React.Component {
     constructor(props) {
-        super();
+        super(props);
         this.state = {
             path: '',
             fps: '5',
@@ -38,9 +38,25 @@ class Controls extends React.Component {
       console.log(e.currentTarget.name);
     }
 
+    handleSubmit(event){
+      setTimeout(() => {
+        this.props.setCounter('3');
+        setTimeout(() =>{
+          this.props.setCounter('2');
+          setTimeout(() =>{
+            this.props.setCounter('1');
+            setTimeout(() =>{
+              this.props.onSubmit(event, this.state.fps, this.state.mode, this.state.duration, this.state.filter);
+            }, 1000);
+          }, 1000);
+        }, 1000);
+      }, 1000);
+    }
+
     render() {
         return (
             <div className="controls">
+
               <div className="control-bar">
                 <button className={this.state.fpsOptionsVisible ? 'active' : ''} name="fpsOptionsVisible" onClick={(e, options) => this.handleClick(e, this.state.fpsOptionsVisible)}>
                   FPS
@@ -133,7 +149,7 @@ class Controls extends React.Component {
                 }
 
               </form>
-              <a className="btn__submit" onClick={(event, controlsFPS, controlsMode, controlsDuration, controlsFilter) => this.props.onSubmit(event, this.state.fps, this.state.mode, this.state.duration, this.state.filter)} />
+              <a className="btn__submit" onClick={(event) => this.handleSubmit(event)} />
             </div>
         );
     }

@@ -36,3 +36,8 @@
 .download_button.active {
     display: inline-block;
 }
+
+.counter{
+  height: 268px;
+  font-size: 200px;
+}

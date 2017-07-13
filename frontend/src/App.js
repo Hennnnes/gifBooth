@@ -18,6 +18,7 @@ class App extends Component {
         customImage: false,
         serverIsFree: 'false',
         serverProcessing: false,
+        counter: '4'
       })
 
   }
@@ -91,14 +92,23 @@ class App extends Component {
       message.qos = 2;
       client.send(message);
       console.log('message send');
+      this.setState({
+        counter: '4'
+      });
+  }
+
+  handleCounter(count){
+    this.setState({
+      counter: count
+    })
   }
 
   render() {
     return (
       <div className="app">
         <Header />
-        <Preview url={this.state.img_url} customImage={this.state.customImage} visible={this.state.serverProcessing}/>
-        <Controls url={this.state.img_url} onSubmit={(event, controlsFPS, controlsMode, controlsDuration, controlsFilter) => this.sendMessage(event, controlsFPS, controlsMode, controlsDuration, controlsFilter)} className={ this.state.serverIsFree === 'true' ? 'controls--hidden ' : 'controls--visible'}/>
+        <Preview url={this.state.img_url} customImage={this.state.customImage} visible={this.state.serverProcessing} counter={this.state.counter}/>
+        <Controls url={this.state.img_url} setCounter={(count) => this.handleCounter(count)} onSubmit={(event, controlsFPS, controlsMode, controlsDuration, controlsFilter) => this.sendMessage(event, controlsFPS, controlsMode, controlsDuration, controlsFilter)} className={ this.state.serverIsFree === 'true' ? 'controls--hidden ' : 'controls--visible'}/>
       </div>
     );
   }
