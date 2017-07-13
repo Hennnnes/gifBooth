@@ -196,9 +196,6 @@ function applyFilter(name, filter) {
         case 'Grey':
             command = 'ffmpeg -i files/' + name + '/output.gif -vf colorchannelmixer=.299:.587:.114:0:.299:.587:.114:0:.299:.587:.114:0: files/' + name + '/outputFilter.gif';
             break;
-        case 'Orange':
-            command = 'ffmpeg -i files/' + name + '/output.gif -vf colorchannelmixer=1.5:0.8:0.1:0:0.4:0.7:0.1:0:0:0:0.1:0 files/' + name + '/outputFilter.gif';
-            break;
         default:
             command = 'mv files/' + name + '/output.gif files/' + name + '/outputFilter.gif';
     }
