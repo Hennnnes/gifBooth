@@ -59,12 +59,12 @@ class App extends Component {
                     this.setState({serverIsFree: msg });
                 }
 
-                if (message.payloadString.substring(0, 8) === 'status: ') {
-                    let msg = message.payloadString.replace('status: ', '');
-                    console.log(msg);
-                    msg = (msg === 'process started') ? true : false;
-                    this.setState({ 'serverProcessing': msg});
-                }
+                // if (message.payloadString.substring(0, 8) === 'status: ') {
+                //     let msg = message.payloadString.replace('status: ', '');
+                //     console.log(msg);
+                //     msg = (msg === 'process started') ? true : false;
+                //     this.setState({ 'serverProcessing': msg});
+                // }
 
                 if (message.payloadString.substring(0, 21) === 'data:image/gif;base64') {
                   this.setState({
@@ -92,15 +92,17 @@ class App extends Component {
       message.qos = 2;
       client.send(message);
       console.log('message send');
-      this.setState({
-        counter: '4'
-      });
+      // this.setState({
+      //   counter: '4'
+      // });
   }
 
-  handleCounter(count){
+  handleCounter(count, server){
     this.setState({
-      counter: count
-    })
+      counter: count,
+      serverProcessing: server
+    });
+    console.log(server);
   }
 
   render() {
@@ -108,7 +110,7 @@ class App extends Component {
       <div className="app">
         <Header />
         <Preview url={this.state.img_url} customImage={this.state.customImage} visible={this.state.serverProcessing} counter={this.state.counter}/>
-        <Controls url={this.state.img_url} setCounter={(count) => this.handleCounter(count)} onSubmit={(event, controlsFPS, controlsMode, controlsDuration, controlsFilter) => this.sendMessage(event, controlsFPS, controlsMode, controlsDuration, controlsFilter)} className={ this.state.serverIsFree === 'true' ? 'controls--hidden ' : 'controls--visible'}/>
+        <Controls url={this.state.img_url} setCounter={(count, server) => this.handleCounter(count, server)} onSubmit={(event, controlsFPS, controlsMode, controlsDuration, controlsFilter) => this.sendMessage(event, controlsFPS, controlsMode, controlsDuration, controlsFilter)} className={ this.state.serverIsFree === 'true' ? 'controls--hidden ' : 'controls--visible'}/>
       </div>
     );
   }

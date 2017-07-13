@@ -40,13 +40,14 @@ class Controls extends React.Component {
 
     handleSubmit(event){
       setTimeout(() => {
-        this.props.setCounter('3');
+        this.props.setCounter('3', false);
         setTimeout(() =>{
-          this.props.setCounter('2');
+          this.props.setCounter('2', false);
           setTimeout(() =>{
-            this.props.setCounter('1');
+            this.props.setCounter('1', false);
+            this.props.onSubmit(event, this.state.fps, this.state.mode, this.state.duration, this.state.filter);
             setTimeout(() =>{
-              this.props.onSubmit(event, this.state.fps, this.state.mode, this.state.duration, this.state.filter);
+              this.props.setCounter('4', true);
             }, 1000);
           }, 1000);
         }, 1000);
