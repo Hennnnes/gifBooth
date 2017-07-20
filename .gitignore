@@ -5,3 +5,4 @@ node_modules/
 npm-debug.log
 server/files/*
 !server/files/.gitkeep
+readme.md
